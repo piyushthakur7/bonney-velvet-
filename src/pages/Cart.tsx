@@ -102,10 +102,13 @@ const Cart = () => {
               </div>
             </div>
 
-            <button className="w-full bg-brand text-white font-bold py-4 rounded-full hover:bg-brand/90 transition-all flex items-center justify-center group">
-              Checkout
-              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
-            </button>
+            <Link 
+              to="/checkout" 
+              className="w-full bg-brand text-white font-bold py-4 rounded-full hover:bg-brand/90 transition-all flex items-center justify-center group uppercase tracking-widest text-xs"
+            >
+              Proceed to Checkout
+              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
+            </Link>
             
             <div className="flex items-center justify-center space-x-4 opacity-50 grayscale pt-4">
               <span className="text-[10px] font-bold">Razorpay</span>
