@@ -7,7 +7,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Star, ShieldCheck, Zap, ShoppingBag, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { PRODUCTS, CONCERNS } from '../constants';
+import { useData } from '../DataContext';
 
 const concernImages: Record<string, string> = {
   'Acne': 'https://images.unsplash.com/photo-1615397323625-f5e95738805f?auto=format&fit=crop&q=80&w=600&h=800',
@@ -18,6 +18,21 @@ const concernImages: Record<string, string> = {
 };
 
 const Home = () => {
+  const { products, loading } = useData();
+  const CONCERNS = ['Acne', 'Dryness', 'Glow', 'Repair', 'Anti-Aging'];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-brand-light">
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-brand border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="pb-24">
       {/* Hero Section: Editorial Split Layout */}
@@ -167,7 +182,7 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {PRODUCTS.slice(0, 2).map((product, i) => (
+            {products.slice(0, 2).map((product, i) => (
               <motion.div 
                 key={product.id}
                 initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}

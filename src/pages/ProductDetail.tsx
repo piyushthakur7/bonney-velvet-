@@ -6,19 +6,33 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Star, ShieldCheck, Zap, ArrowLeft, ChevronRight, Minus, Plus, ArrowRight } from 'lucide-react';
-import { PRODUCTS } from '../constants';
+import { useData } from '../DataContext';
 import { useCart } from '../CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { products, loading } = useData();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [isAdded, setIsAdded] = useState(false);
 
-  const product = PRODUCTS.find(p => p.id === id);
+  const product = products.find(p => p.id === id);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-brand-light">
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-brand border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
+
 
   if (!product) {
     return (
@@ -254,7 +268,7 @@ const ProductDetail = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {PRODUCTS.filter(p => p.id !== id).slice(0, 4).map((p) => (
+          {products.filter(p => p.id !== id).slice(0, 4).map((p) => (
             <Link key={p.id} to={`/product/${p.id}`} className="group space-y-6">
               <div className="aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-50 premium-shadow">
                 <img 
