@@ -5,9 +5,9 @@
 
 import React, { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Filter, ChevronDown, ShoppingBag } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { useData } from '../DataContext';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 
 const Shop = () => {
   const { products, categories, loading } = useData();
@@ -99,19 +99,23 @@ const Shop = () => {
                 <div className="flex flex-wrap items-center gap-4">
                   <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mr-4">Filter By:</span>
                   <div className="flex flex-wrap gap-2">
-                    {categories.map(cat => (
-                      <button
-                        key={cat}
-                        onClick={() => toggleFilter('category', cat)}
-                        className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
-                          categoryFilter === cat 
-                          ? 'bg-brand text-white' 
-                          : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
+                    {categories.length > 0 ? (
+                      categories.map(cat => (
+                        <button
+                          key={cat}
+                          onClick={() => toggleFilter('category', cat)}
+                          className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
+                            categoryFilter === cat 
+                            ? 'bg-brand text-white' 
+                            : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                      ))
+                    ) : (
+                      <span className="text-[10px] font-bold text-zinc-300 italic uppercase tracking-widest">No Category found</span>
+                    )}
                   </div>
                   <div className="h-4 w-px bg-zinc-200 mx-2 hidden sm:block"></div>
                   <div className="flex flex-wrap gap-2">
@@ -199,13 +203,17 @@ const Shop = () => {
 
               {filteredProducts.length === 0 && (
                 <div className="text-center py-32 space-y-6">
-                  <p className="text-zinc-400 font-light italic font-serif text-2xl">No formulations match your selection.</p>
-                  <button 
-                    onClick={() => setSearchParams({})}
-                    className="text-brand font-bold uppercase tracking-widest text-[10px] border-b border-brand pb-1"
-                  >
-                    Reset Filters
-                  </button>
+                  <p className="text-zinc-400 font-light italic font-serif text-2xl">
+                    {products.length === 0 ? "No products found in the store." : "No formulations match your selection."}
+                  </p>
+                  {products.length > 0 && (
+                    <button 
+                      onClick={() => setSearchParams({})}
+                      className="text-brand font-bold uppercase tracking-widest text-[10px] border-b border-brand pb-1"
+                    >
+                      Reset Filters
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -216,3 +224,4 @@ const Shop = () => {
   );
 };
 
+export default Shop;

@@ -182,40 +182,46 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {products.slice(0, 2).map((product, i) => (
-              <motion.div 
-                key={product.id}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="flex flex-col md:flex-row bg-white rounded-[3rem] overflow-hidden premium-shadow group"
-              >
-                <div className="md:w-1/2 aspect-square md:aspect-auto overflow-hidden">
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <div className="md:w-1/2 p-10 flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <span className="text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</span>
-                    <h3 className="text-3xl font-display font-bold text-brand leading-tight">{product.name}</h3>
-                    <p className="text-zinc-500 text-sm font-light leading-relaxed line-clamp-3">{product.description}</p>
+            {products.length > 0 ? (
+              products.slice(0, 2).map((product, i) => (
+                <motion.div 
+                  key={product.id}
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="flex flex-col md:flex-row bg-white rounded-[3rem] overflow-hidden premium-shadow group"
+                >
+                  <div className="md:w-1/2 aspect-square md:aspect-auto overflow-hidden">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
-                  <div className="pt-8 flex items-center justify-between">
-                    <div className="space-y-1">
-                      <p className="text-2xl font-display font-black text-brand">₹{product.price}</p>
-                      <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Free Shipping</p>
+                  <div className="md:w-1/2 p-10 flex flex-col justify-between">
+                    <div className="space-y-4">
+                      <span className="text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</span>
+                      <h3 className="text-3xl font-display font-bold text-brand leading-tight">{product.name}</h3>
+                      <p className="text-zinc-500 text-sm font-light leading-relaxed line-clamp-3">{product.description}</p>
                     </div>
-                    <Link to={`/product/${product.id}`} className="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
-                      <ArrowUpRight size={24} />
-                    </Link>
+                    <div className="pt-8 flex items-center justify-between">
+                      <div className="space-y-1">
+                        <p className="text-2xl font-display font-black text-brand">₹{product.price}</p>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Free Shipping</p>
+                      </div>
+                      <Link to={`/product/${product.id}`} className="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                        <ArrowUpRight size={24} />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            ) : (
+              <div className="lg:col-span-2 text-center py-20 bg-white/50 rounded-[3rem] border border-zinc-100">
+                <p className="text-zinc-400 font-light italic font-serif text-2xl">No products currently available.</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

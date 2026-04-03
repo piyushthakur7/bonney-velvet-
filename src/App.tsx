@@ -23,27 +23,25 @@ export default function App() {
       <CartProvider>
         <Router>
           <div className="min-h-screen flex flex-col">
-
-          <Navbar />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/refund-policy" element={<RefundPolicy />} />
-              <Route path="/shipping-policy" element={<ShippingPolicy />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
+            <Navbar />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/refund-policy" element={<RefundPolicy />} />
+                <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
         </Router>
       </CartProvider>
     </DataProvider>
   );
 }
-

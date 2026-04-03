@@ -18,8 +18,8 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
-  const [products, setProducts] = useState<Product[]>(HARDCODED_PRODUCTS);
-  const [categories, setCategories] = useState<string[]>(Array.from(HARDCODED_CATEGORIES));
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,14 +34,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
         if (fetchedProducts.length > 0) {
           setProducts(fetchedProducts);
-        } else {
-          console.warn("No products fetched from WooCommerce, falling back to hardcoded data.");
         }
 
         if (fetchedCategories.length > 0) {
           setCategories(fetchedCategories);
-        } else {
-          console.warn("No categories fetched from WooCommerce, falling back to hardcoded data.");
         }
       } catch (err) {
         console.error("Failed to fetch data from WooCommerce:", err);

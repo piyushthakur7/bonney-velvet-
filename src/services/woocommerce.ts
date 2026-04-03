@@ -2,7 +2,7 @@ import { Product } from '../types';
 
 // Configuration for WooCommerce integration
 // Set these values in your .env file
-const WC_API_URL = import.meta.env.VITE_WC_API_URL || 'https://your-wordpress-site.com/wp-json/wc/v3';
+const WC_API_URL = (import.meta.env.VITE_WC_API_URL || 'https://your-wordpress-site.com/wp-json/wc/v3').replace(/\/$/, '');
 const WC_CONSUMER_KEY = import.meta.env.VITE_WC_CONSUMER_KEY || '';
 const WC_CONSUMER_SECRET = import.meta.env.VITE_WC_CONSUMER_SECRET || '';
 
