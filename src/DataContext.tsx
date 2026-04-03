@@ -32,6 +32,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           fetchWooCommerceCategories()
         ]);
 
+        console.log("DEBUG: Fetched products count:", fetchedProducts.length);
+        console.log("DEBUG: Fetched categories count:", fetchedCategories.length);
+
         if (fetchedProducts.length > 0) {
           setProducts(fetchedProducts);
         }
@@ -40,8 +43,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           setCategories(fetchedCategories);
         }
       } catch (err) {
-        console.error("Failed to fetch data from WooCommerce:", err);
-        setError("Failed to load products from store.");
+        console.error("DEBUG: Failed to fetch data from WooCommerce:", err);
+        setError(`Failed to load products: ${err instanceof Error ? err.message : String(err)}`);
       } finally {
         setLoading(false);
       }
