@@ -5,10 +5,13 @@
 
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Star, ShieldCheck, Zap, ArrowLeft, ChevronRight, Minus, Plus, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Star, ShieldCheck, Zap, ArrowLeft, ChevronRight, Minus, Plus, ArrowRight, Sparkles } from 'lucide-react';
+
 import { useData } from '../DataContext';
 import { useCart } from '../CartContext';
 import { motion, AnimatePresence } from 'motion/react';
+import BrandTrustBar from '../components/BrandTrustBar';
+
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -141,17 +144,15 @@ const ProductDetail = () => {
               </p>
             </div>
 
-            {/* Benefits Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {product.benefits.slice(0, 4).map((benefit, i) => (
-                <div key={i} className="flex items-center space-x-3 p-4 bg-brand-light rounded-2xl border border-brand/5">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand premium-shadow">
-                    <ShieldCheck size={14} />
-                  </div>
-                  <span className="text-xs font-bold text-brand/70 uppercase tracking-wide leading-tight">{benefit}</span>
-                </div>
-              ))}
+            {/* Our Purity Standard */}
+            <div className="space-y-6 pt-12 border-t border-zinc-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand/40">Our Purity Standard</h3>
+                <Sparkles size={14} className="text-brand/20" />
+              </div>
+              <BrandTrustBar mode="grid" />
             </div>
+
 
             {/* Actions */}
             <div className="space-y-6 pt-6 border-t border-zinc-100">

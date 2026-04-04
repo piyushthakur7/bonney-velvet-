@@ -8,6 +8,8 @@ import { motion } from 'motion/react';
 import { ArrowRight, Star, ShieldCheck, Zap, ShoppingBag, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useData } from '../DataContext';
+import BrandTrustBar from '../components/BrandTrustBar';
+
 
 const concernImages: Record<string, string> = {
   'Acne': 'https://images.unsplash.com/photo-1615397323625-f5e95738805f?auto=format&fit=crop&q=80&w=600&h=800',
@@ -108,24 +110,8 @@ const Home = () => {
       </section>
 
       {/* Marquee/Trust Bar */}
-      <div className="bg-brand py-6 overflow-hidden whitespace-nowrap">
-        <motion.div 
-          animate={{ x: [0, -1000] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="flex space-x-24 items-center"
-        >
-          {[1,2,3,4,5].map(i => (
-            <div key={i} className="flex space-x-24 items-center">
-              <span className="text-white/40 text-sm font-bold tracking-[0.4em] uppercase">Cruelty Free</span>
-              <Star className="text-white/20" size={16} fill="currentColor" />
-              <span className="text-white/40 text-sm font-bold tracking-[0.4em] uppercase">Paraben Free</span>
-              <Star className="text-white/20" size={16} fill="currentColor" />
-              <span className="text-white/40 text-sm font-bold tracking-[0.4em] uppercase">Sulphate Free</span>
-              <Star className="text-white/20" size={16} fill="currentColor" />
-            </div>
-          ))}
-        </motion.div>
-      </div>
+      <BrandTrustBar mode="marquee" speed={20} />
+
 
       {/* Shop by Concern: Grid with Overlays */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 space-y-16">
