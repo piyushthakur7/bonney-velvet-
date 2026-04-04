@@ -7,12 +7,15 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, CreditCard, Truck, MapPin, Phone, User, Mail } from 'lucide-react';
 import { useCart } from '../CartContext';
-import { loadRazorpayScript, openRazorpayCheckout } from '../services/razorpay';
+import { loadRazorpayScript, openRazorpayCheckout, createRazorpayOrder, verifyRazorpayPayment } from '../services/razorpay';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from '../AuthContext';
+import { supabase } from '../lib/supabase';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, total, clearCart, subtotal, shippingFee } = useCart();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -44,39 +47,84 @@ const Checkout = () => {
     e.preventDefault();
     setLoading(true);
 
-    const scriptLoaded = await loadRazorpayScript();
+    try {
+      // 1. Load Razorpay Script
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        throw new Error('Razorpay SDK failed to load');
+      }
 
-    if (!scriptLoaded) {
-      alert('Razorpay SDK failed to load. Are you online?');
-      setLoading(false);
-      return;
+      // 2. Create Order on Backend
+      const orderData = await createRazorpayOrder(total, `receipt_${Date.now()}`);
+      if (!orderData || !orderData.id) {
+        throw new Error('Failed to create secure order');
+      }
+
+      // 3. Open Razorpay Checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Bonny Velvet',
+        description: 'Order Payment',
+        image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=100&h=100',
+        order_id: orderData.id,
+        handler: async (response: any) => {
+          try {
+            setLoading(true);
+            // 4. Verify Payment on Backend
+            const verification = await verifyRazorpayPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verification.status === 'success') {
+              // 5. Save Order to Supabase
+              const { error: dbError } = await supabase.from('orders').insert([{
+                user_id: user?.id,
+                amount: total,
+                status: 'paid',
+                payment_id: response.razorpay_payment_id,
+                order_id: response.razorpay_order_id,
+                shipping_details: formData,
+                total_items: cart.length
+              }]);
+
+              if (dbError) throw dbError;
+
+              setSuccess(true);
+              clearCart();
+            } else {
+              alert('Payment verification failed');
+            }
+          } catch (err: any) {
+            console.error('Finalization Error:', err);
+            alert('Error finalizing order: ' + err.message);
+          } finally {
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: formData.name || user?.user_metadata?.full_name,
+          email: formData.email || user?.email,
+          contact: formData.phone,
+        },
+        theme: {
+          color: '#400c2c',
+        },
+      };
+
+      openRazorpayCheckout(options);
+    } catch (err: any) {
+      console.error('Checkout Error:', err);
+      alert(err.message);
+    } finally {
+      // Don't set loading false here because the popup is open
+      // We set it false after verification or on error
     }
-
-    const options = {
-      key: (import.meta as any).env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SZ0fAoSQUqZtsb',
-      amount: total * 100, // Amount in paise
-      currency: 'INR',
-      name: 'Bonny Velvet',
-      description: 'Order Payment',
-      image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=100&h=100',
-      handler: (response: any) => {
-        console.log('Payment Successful:', response);
-        setSuccess(true);
-        clearCart();
-        setLoading(false);
-      },
-      prefill: {
-        name: formData.name,
-        email: formData.email,
-        contact: formData.phone,
-      },
-      theme: {
-        color: '#4A1D2D',
-      },
-    };
-
-    openRazorpayCheckout(options);
   };
+
 
   if (success) {
     return (

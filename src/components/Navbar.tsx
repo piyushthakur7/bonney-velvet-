@@ -5,9 +5,11 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Menu, X, Search } from 'lucide-react';
+import { ShoppingBag, Menu, X, Search, User as UserIcon } from 'lucide-react';
 import { useCart } from '../CartContext';
+import { useAuth } from '../AuthContext';
 import { motion, AnimatePresence } from 'motion/react';
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -20,6 +22,8 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const { user } = useAuth();
 
   const navLinks = [
     { name: 'Shop', path: '/shop' },
@@ -39,7 +43,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:text-brand ${
+                className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-brand ${
                   location.pathname === link.path ? 'text-brand' : 'text-zinc-500'
                 }`}
               >
@@ -61,7 +65,7 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:text-brand ${
+                  className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-brand ${
                     location.pathname === link.path ? 'text-brand' : 'text-zinc-500'
                   }`}
                 >
@@ -74,6 +78,17 @@ const Navbar = () => {
               <button className="p-2 text-zinc-400 hover:text-brand transition-colors">
                 <Search size={18} />
               </button>
+              
+              {user ? (
+                <Link to="/account" className={`p-2 transition-colors ${location.pathname === '/account' ? 'text-brand' : 'text-zinc-400 hover:text-brand'}`}>
+                  <UserIcon size={18} />
+                </Link>
+              ) : (
+                <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-brand transition-colors">
+                  Login
+                </Link>
+              )}
+
               <Link to="/cart" className="relative p-2 text-zinc-400 hover:text-brand transition-colors">
                 <ShoppingBag size={18} />
                 {totalItems > 0 && (
@@ -113,10 +128,32 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
+              <div className="pt-4 border-t border-zinc-50 mt-4 px-3">
+                {user ? (
+                  <Link 
+                    to="/account" 
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-3 text-brand font-bold py-2"
+                  >
+                    <UserIcon size={18} />
+                    <span>My Account</span>
+                  </Link>
+                ) : (
+                  <Link 
+                    to="/login" 
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-3 text-zinc-500 font-bold py-2"
+                  >
+                    <UserIcon size={18} />
+                    <span>Login / Signup</span>
+                  </Link>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
     </nav>
   );
 };
