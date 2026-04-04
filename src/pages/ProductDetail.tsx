@@ -54,6 +54,11 @@ const ProductDetail = () => {
     setTimeout(() => setIsAdded(false), 2000);
   };
 
+  const handleExpressCheckout = () => {
+    handleAddToCart();
+    navigate('/checkout');
+  };
+
   return (
     <div className="pb-24">
       {/* Breadcrumbs & Back */}
@@ -206,7 +211,10 @@ const ProductDetail = () => {
                 </button>
               </div>
               
-              <button className="w-full py-6 border border-brand text-brand font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-brand hover:text-white transition-all">
+              <button 
+                onClick={handleExpressCheckout}
+                className="w-full py-6 border border-brand text-brand font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-brand hover:text-white transition-all"
+              >
                 Express Checkout
               </button>
             </div>

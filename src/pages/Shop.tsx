@@ -5,12 +5,15 @@
 
 import React, { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Check } from 'lucide-react';
 import { useData } from '../DataContext';
-import { motion } from 'motion/react';
+import { useCart } from '../CartContext';
+import { motion, AnimatePresence } from 'motion/react';
 
 const Shop = () => {
   const { products, categories, loading } = useData();
+  const { addToCart } = useCart();
+  const [addedId, setAddedId] = useState<string | null>(null);
   const CONCERNS = ['Acne', 'Dryness', 'Glow', 'Repair', 'Anti-Aging'];
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -48,6 +51,14 @@ const Shop = () => {
       newParams.set(type, value);
     }
     setSearchParams(newParams);
+  };
+
+  const handleQuickAdd = (e: React.MouseEvent, product: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product);
+    setAddedId(product.id);
+    setTimeout(() => setAddedId(null), 2000);
   };
 
   return (
@@ -172,11 +183,36 @@ const Shop = () => {
                       />
                       <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       
-                      <div className="absolute top-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center premium-shadow">
-                          <ShoppingBag size={20} className="text-brand" />
+                      <button 
+                        onClick={(e) => handleQuickAdd(e, product)}
+                        className="absolute top-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20"
+                      >
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center premium-shadow transition-colors ${
+                          addedId === product.id ? 'bg-green-600 text-white' : 'bg-white text-brand'
+                        }`}>
+                          <AnimatePresence mode="wait">
+                            {addedId === product.id ? (
+                              <motion.div
+                                key="check"
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 1.5, opacity: 0 }}
+                              >
+                                <Check size={20} />
+                              </motion.div>
+                            ) : (
+                              <motion.div
+                                key="cart"
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 1.5, opacity: 0 }}
+                              >
+                                <ShoppingBag size={20} />
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
-                      </div>
+                      </button>
                     </Link>
                     
                     <div className="space-y-3 px-2">
