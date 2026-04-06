@@ -118,48 +118,53 @@ const Shop = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
             <div className="flex flex-col space-y-16">
               {/* Toolbar */}
-              <div className="flex flex-wrap items-center justify-between gap-8 py-8 border-y border-zinc-100">
-                <div className="flex flex-wrap items-center gap-4">
-                  <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mr-4">Filter By:</span>
-                  <div className="flex flex-wrap gap-2">
-                    {categories.length > 0 ? (
-                      categories.map(cat => (
+              <div className="flex flex-col space-y-8 py-8 border-y border-zinc-100">
+                <div className="flex flex-col space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] shrink-0">By Category:</span>
+                    <div className="flex overflow-x-auto pb-2 scrollbar-hide gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+                      {categories.length > 0 ? (
+                        categories.map(cat => (
+                          <button
+                            key={cat}
+                            onClick={() => toggleFilter('category', cat)}
+                            className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                              categoryFilter === cat 
+                              ? 'bg-brand text-white' 
+                              : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
+                            }`}
+                          >
+                            {cat}
+                          </button>
+                        ))
+                      ) : (
+                        <span className="text-[10px] font-bold text-zinc-300 italic uppercase tracking-widest">No Category found</span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4">
+                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] shrink-0">By Concern:</span>
+                    <div className="flex overflow-x-auto pb-2 scrollbar-hide gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+                      {CONCERNS.map(con => (
                         <button
-                          key={cat}
-                          onClick={() => toggleFilter('category', cat)}
-                          className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
-                            categoryFilter === cat 
+                          key={con}
+                          onClick={() => toggleFilter('concern', con)}
+                          className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                            concernFilter === con 
                             ? 'bg-brand text-white' 
                             : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
                           }`}
                         >
-                          {cat}
+                          {con}
                         </button>
-                      ))
-                    ) : (
-                      <span className="text-[10px] font-bold text-zinc-300 italic uppercase tracking-widest">No Category found</span>
-                    )}
-                  </div>
-                  <div className="h-4 w-px bg-zinc-200 mx-2 hidden sm:block"></div>
-                  <div className="flex flex-wrap gap-2">
-                    {CONCERNS.map(con => (
-                      <button
-                        key={con}
-                        onClick={() => toggleFilter('concern', con)}
-                        className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
-                          concernFilter === con 
-                          ? 'bg-brand text-white' 
-                          : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
-                        }`}
-                      >
-                        {con}
-                      </button>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 w-full lg:w-auto">
-                  <div className="relative flex-1 lg:w-64">
+                <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 border-t border-zinc-50 sm:border-t-0 sm:pt-0">
+                  <div className="relative flex-1 w-full lg:w-64">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
                     <input
                       type="text"
@@ -190,8 +195,8 @@ const Shop = () => {
                     )}
                   </div>
                   <div className="h-8 w-px bg-zinc-100 mx-2 hidden lg:block"></div>
-                  <div className="flex items-center space-x-4">
-                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Sort:</span>
+                  <div className="flex items-center justify-between w-full sm:w-auto space-x-4">
+                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Sort By:</span>
                     <select
                       value={sortBy}
                       onChange={(e) => {

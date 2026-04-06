@@ -29,45 +29,45 @@ const Cart = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold text-brand tracking-tight mb-12">Your Shopping Bag</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12">
+      <h1 className="text-3xl sm:text-4xl font-display font-black text-brand tracking-tight mb-12">Your Shopping Bag</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
         {/* Items */}
         <div className="lg:col-span-2 space-y-8">
           {cart.map((item) => (
-            <div key={item.id} className="flex space-x-6 pb-8 border-b border-zinc-100">
-              <div className="w-24 h-32 bg-zinc-100 rounded-2xl overflow-hidden shrink-0">
+            <div key={item.id} className="flex flex-col sm:flex-row sm:space-x-6 pb-8 border-b border-zinc-100 gap-6">
+              <div className="w-full sm:w-24 aspect-[4/5] sm:aspect-auto sm:h-32 bg-zinc-100 rounded-2xl overflow-hidden shrink-0">
                 <img src={item.image} alt={item.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>
               <div className="flex-1 flex flex-col justify-between py-1">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-bold text-zinc-900">{item.name}</h3>
+                    <h3 className="text-xl sm:text-lg font-bold text-zinc-900">{item.name}</h3>
                     <p className="text-xs text-zinc-400 uppercase tracking-widest mt-1">{item.category}</p>
                   </div>
-                  <p className="font-bold text-brand">₹{item.price * item.quantity}</p>
+                  <p className="font-display font-black text-brand text-lg">₹{item.price * item.quantity}</p>
                 </div>
                 
-                <div className="flex justify-between items-center mt-4">
-                  <div className="flex items-center border border-zinc-200 rounded-full px-3 py-1">
+                <div className="flex justify-between items-center mt-6">
+                  <div className="flex items-center bg-zinc-50 rounded-full px-4 py-2 border border-zinc-100">
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="p-1 text-zinc-400 hover:text-brand"
+                      className="p-1 text-zinc-400 hover:text-brand transition-colors"
                     >
-                      <Minus size={14} />
+                      <Minus size={16} />
                     </button>
-                    <span className="w-8 text-center text-sm font-bold text-zinc-900">{item.quantity}</span>
+                    <span className="w-10 text-center text-sm font-black text-brand">{item.quantity}</span>
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="p-1 text-zinc-400 hover:text-brand"
+                      className="p-1 text-zinc-400 hover:text-brand transition-colors"
                     >
-                      <Plus size={14} />
+                      <Plus size={16} />
                     </button>
                   </div>
                   <button 
                     onClick={() => removeFromCart(item.id)}
-                    className="text-zinc-400 hover:text-red-500 transition-colors"
+                    className="p-3 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-sm"
                   >
                     <Trash2 size={18} />
                   </button>

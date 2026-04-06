@@ -52,12 +52,12 @@ const Home = () => {
                 The New Standard of Glow
               </span>
             </div>
-            <h1 className="text-6xl md:text-8xl font-display font-black text-brand leading-[0.9] tracking-tighter text-balance">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-black text-brand leading-[0.9] tracking-tighter text-balance">
               VELVET <br />
               <span className="italic font-serif font-light">Skin</span> <br />
               REDEFINED.
             </h1>
-            <p className="text-lg md:text-xl text-zinc-600 max-w-md leading-relaxed font-light">
+            <p className="text-base md:text-xl text-zinc-600 max-w-md leading-relaxed font-light">
               Scientifically formulated for the modern Indian lifestyle. High-performance actives meet aesthetic luxury.
             </p>
           </motion.div>
@@ -66,13 +66,13 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="flex flex-wrap gap-6"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6"
           >
-            <Link to="/shop" className="group relative px-10 py-5 bg-brand text-white font-bold rounded-full overflow-hidden transition-all hover:pr-14">
+            <Link to="/shop" className="group relative px-10 py-5 bg-brand text-white font-bold rounded-full overflow-hidden transition-all hover:pr-14 text-center">
               <span className="relative z-10">Explore Collection</span>
               <ArrowRight className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all" size={20} />
             </Link>
-            <Link to="/about" className="px-10 py-5 border border-brand/20 text-brand font-bold rounded-full hover:bg-brand/5 transition-all">
+            <Link to="/about" className="px-10 py-5 border border-brand/20 text-brand font-bold rounded-full hover:bg-brand/5 transition-all text-center">
               Our Philosophy
             </Link>
           </motion.div>

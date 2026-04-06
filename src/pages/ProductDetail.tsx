@@ -88,7 +88,7 @@ const ProductDetail = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="aspect-[4/5] rounded-[3rem] overflow-hidden bg-zinc-50 premium-shadow"
+              className="aspect-[4/5] rounded-[2rem] sm:rounded-[3rem] overflow-hidden bg-zinc-50 premium-shadow"
             >
               <img 
                 src={product.image} 
@@ -97,14 +97,14 @@ const ProductDetail = () => {
                 referrerPolicy="no-referrer"
               />
             </motion.div>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-2 sm:gap-4 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
               {[
                 product.image,
                 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=600',
                 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=600&h=600',
                 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=600&h=600'
               ].map((img, i) => (
-                <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-zinc-50 cursor-pointer hover:ring-2 hover:ring-brand transition-all opacity-60 hover:opacity-100">
+                <div key={i} className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-50 cursor-pointer hover:ring-2 hover:ring-brand transition-all opacity-60 hover:opacity-100 min-w-[80px] sm:min-w-0">
                   <img 
                     src={img} 
                     alt="" 
@@ -129,7 +129,7 @@ const ProductDetail = () => {
                 </div>
               </div>
               
-              <h1 className="text-5xl md:text-6xl font-display font-black text-brand leading-[0.9] tracking-tighter">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-brand leading-[0.9] tracking-tighter">
                 {product.name.split(' ').map((word, i) => (
                   <React.Fragment key={i}>
                     {i === 1 ? <span className="italic font-serif font-light">{word} </span> : word + ' '}
@@ -138,13 +138,13 @@ const ProductDetail = () => {
               </h1>
 
               <div className="flex items-end space-x-4">
-                <span className="text-4xl font-display font-black text-brand">₹{product.price}</span>
+                <span className="text-3xl sm:text-4xl font-display font-black text-brand">₹{product.price}</span>
                 {product.originalPrice && (
                   <span className="text-xl text-zinc-300 line-through font-light mb-1">₹{product.originalPrice}</span>
                 )}
               </div>
 
-              <p className="text-zinc-500 font-light text-lg leading-relaxed">
+              <p className="text-zinc-500 font-light text-base sm:text-lg leading-relaxed">
                 {product.description}
               </p>
             </div>
