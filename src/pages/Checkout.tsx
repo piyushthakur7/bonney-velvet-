@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../AuthContext';
 import { supabase } from '../lib/supabase';
 import { createWooCommerceOrder } from '../services/woocommerce';
+import { syncOrderToShiprocket } from '../services/shiprocket';
+
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -26,8 +28,10 @@ const Checkout = () => {
     phone: '',
     address: '',
     city: '',
+    state: '',
     pincode: '',
   });
+
 
   if (cart.length === 0 && !success) {
     return (
@@ -99,7 +103,13 @@ const Checkout = () => {
                 await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
               } catch (wcError) {
                 console.error('WooCommerce Sync Error:', wcError);
-                // We don't block the user if only the sync fails, as they've already paid
+              }
+
+              // 7. Sync Order to Shiprocket for Fulfillment
+              try {
+                await syncOrderToShiprocket(cart, formData, total);
+              } catch (srError) {
+                console.error('Shiprocket Sync Error:', srError);
               }
 
               setSuccess(true);
@@ -252,7 +262,7 @@ const Checkout = () => {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">City</label>
                     <input
@@ -261,7 +271,18 @@ const Checkout = () => {
                       value={formData.city}
                       onChange={handleInputChange}
                       className="w-full px-6 py-5 bg-zinc-50 border border-zinc-100 rounded-3xl focus:outline-none focus:ring-2 focus:ring-brand/10 focus:border-brand transition-all font-medium text-brand"
-                      placeholder="Bhopal"
+                      placeholder="Mumbai"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">State</label>
+                    <input
+                      required
+                      name="state"
+                      value={formData.state}
+                      onChange={handleInputChange}
+                      className="w-full px-6 py-5 bg-zinc-50 border border-zinc-100 rounded-3xl focus:outline-none focus:ring-2 focus:ring-brand/10 focus:border-brand transition-all font-medium text-brand"
+                      placeholder="Maharashtra"
                     />
                   </div>
                   <div className="space-y-2">
@@ -272,7 +293,7 @@ const Checkout = () => {
                       value={formData.pincode}
                       onChange={handleInputChange}
                       className="w-full px-6 py-5 bg-zinc-50 border border-zinc-100 rounded-3xl focus:outline-none focus:ring-2 focus:ring-brand/10 focus:border-brand transition-all font-medium text-brand"
-                      placeholder="462001"
+                      placeholder="400001"
                     />
                   </div>
                 </div>
