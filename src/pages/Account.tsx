@@ -152,9 +152,14 @@ const Account = () => {
                       </div>
                     </div>
 
-                    <button className="bg-brand-light text-brand p-4 rounded-full group-hover:bg-brand group-hover:text-white transition-all">
-                      <ChevronRight size={20} />
-                    </button>
+                    <div className="flex flex-col md:flex-row items-center gap-4">
+                      <button className="bg-brand text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-brand/90 transition-all premium-shadow">
+                        Track Order
+                      </button>
+                      <button className="bg-brand-light text-brand p-4 rounded-full group-hover:bg-brand group-hover:text-white transition-all">
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
                   </motion.div>
                 ))}
               </div>

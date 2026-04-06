@@ -5,7 +5,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { ShoppingBag, Check } from 'lucide-react';
+import { ShoppingBag, Check, Search, X } from 'lucide-react';
 import { useData } from '../DataContext';
 import { useCart } from '../CartContext';
 import { motion, AnimatePresence } from 'motion/react';
@@ -21,6 +21,7 @@ const Shop = () => {
 
   const categoryFilter = searchParams.get('category');
   const concernFilter = searchParams.get('concern');
+  const searchQuery = searchParams.get('q') || '';
   const sortBy = searchParams.get('sort') || 'featured';
 
   const filteredProducts = useMemo(() => {
@@ -31,7 +32,18 @@ const Shop = () => {
     }
 
     if (concernFilter) {
-      result = result.filter(p => p.concern.includes(concernFilter as any));
+      result = result.filter(p => p.concern?.includes(concernFilter as any));
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(p => {
+        const nameMatch = p.name?.toLowerCase().includes(query);
+        const descMatch = p.description?.toLowerCase().includes(query);
+        const catMatch = p.category?.toLowerCase().includes(query);
+        const concernMatch = p.concern?.some(c => c.toLowerCase().includes(query));
+        return nameMatch || descMatch || catMatch || concernMatch;
+      });
     }
 
     if (sortBy === 'price-low') {
@@ -41,7 +53,7 @@ const Shop = () => {
     }
 
     return result;
-  }, [categoryFilter, concernFilter, sortBy, products]);
+  }, [categoryFilter, concernFilter, searchQuery, sortBy, products]);
 
   const toggleFilter = (type: 'category' | 'concern', value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -146,21 +158,54 @@ const Shop = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4">
-                  <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Sort:</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => {
-                      const newParams = new URLSearchParams(searchParams);
-                      newParams.set('sort', e.target.value);
-                      setSearchParams(newParams);
-                    }}
-                    className="bg-transparent text-[10px] font-bold uppercase tracking-widest focus:outline-none cursor-pointer text-brand"
-                  >
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                  </select>
+                <div className="flex items-center space-x-4 w-full lg:w-auto">
+                  <div className="relative flex-1 lg:w-64">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
+                    <input
+                      type="text"
+                      placeholder="Search formulations..."
+                      value={searchQuery}
+                      onChange={(e) => {
+                        const newParams = new URLSearchParams(searchParams);
+                        if (e.target.value) {
+                          newParams.set('q', e.target.value);
+                        } else {
+                          newParams.delete('q');
+                        }
+                        setSearchParams(newParams);
+                      }}
+                      className="w-full pl-12 pr-10 py-3 bg-zinc-50 border border-zinc-100 rounded-full text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-brand/10 transition-all"
+                    />
+                    {searchQuery && (
+                      <button 
+                        onClick={() => {
+                          const newParams = new URLSearchParams(searchParams);
+                          newParams.delete('q');
+                          setSearchParams(newParams);
+                        }}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-brand"
+                      >
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+                  <div className="h-8 w-px bg-zinc-100 mx-2 hidden lg:block"></div>
+                  <div className="flex items-center space-x-4">
+                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Sort:</span>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => {
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.set('sort', e.target.value);
+                        setSearchParams(newParams);
+                      }}
+                      className="bg-transparent text-[10px] font-bold uppercase tracking-widest focus:outline-none cursor-pointer text-brand"
+                    >
+                      <option value="featured">Featured</option>
+                      <option value="price-low">Price: Low to High</option>
+                      <option value="price-high">Price: High to Low</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 

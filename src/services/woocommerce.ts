@@ -1,4 +1,4 @@
-import { Product } from '../types';
+import { Product, CartItem } from '../types';
 
 // Configuration for WooCommerce integration
 // Set these values in your .env file
@@ -83,6 +83,82 @@ export const fetchWooCommerceProducts = async (): Promise<Product[]> => {
   } catch (error) {
     console.error('Error fetching products from WooCommerce:', error);
     return [];
+  }
+};
+
+/**
+ * Creates an order in WooCommerce after successful payment.
+ * 
+ * @param cart Items in the cart
+ * @param customerDetails Billing and shipping details
+ * @param total Total amount paid
+ * @param paymentId Razorpay payment ID
+ * @returns The created order object or null
+ */
+export const createWooCommerceOrder = async (
+  cart: CartItem[], 
+  customerDetails: any, 
+  total: number, 
+  paymentId: string
+): Promise<any> => {
+  if (!WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
+    console.warn("WooCommerce credentials missing. Cannot sync order.");
+    return null;
+  }
+
+  try {
+    const lineItems = cart.map(item => ({
+      product_id: parseInt(item.id),
+      quantity: item.quantity,
+    }));
+
+    const orderData = {
+      payment_method: 'razorpay',
+      payment_method_title: 'Razorpay',
+      set_paid: true,
+      billing: {
+        first_name: customerDetails.name.split(' ')[0] || '',
+        last_name: customerDetails.name.split(' ').slice(1).join(' ') || '',
+        address_1: customerDetails.address,
+        city: customerDetails.city,
+        postcode: customerDetails.pincode,
+        country: 'IN',
+        email: customerDetails.email,
+        phone: customerDetails.phone,
+      },
+      shipping: {
+        first_name: customerDetails.name.split(' ')[0] || '',
+        last_name: customerDetails.name.split(' ').slice(1).join(' ') || '',
+        address_1: customerDetails.address,
+        city: customerDetails.city,
+        postcode: customerDetails.pincode,
+        country: 'IN',
+      },
+      line_items: lineItems,
+      customer_note: `Razorpay Payment ID: ${paymentId}`,
+    };
+
+    const url = new URL(`${WC_API_URL}/orders`);
+    url.searchParams.append('consumer_key', WC_CONSUMER_KEY);
+    url.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`WooCommerce API Error: ${errorData.message || response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating order in WooCommerce:', error);
+    return null;
   }
 };
 

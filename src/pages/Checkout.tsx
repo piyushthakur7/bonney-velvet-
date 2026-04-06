@@ -11,6 +11,7 @@ import { loadRazorpayScript, openRazorpayCheckout, createRazorpayOrder, verifyRa
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../AuthContext';
 import { supabase } from '../lib/supabase';
+import { createWooCommerceOrder } from '../services/woocommerce';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -92,6 +93,14 @@ const Checkout = () => {
               }]);
 
               if (dbError) throw dbError;
+
+              // 6. Sync Order to WooCommerce (Optional but recommended)
+              try {
+                await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
+              } catch (wcError) {
+                console.error('WooCommerce Sync Error:', wcError);
+                // We don't block the user if only the sync fails, as they've already paid
+              }
 
               setSuccess(true);
               clearCart();

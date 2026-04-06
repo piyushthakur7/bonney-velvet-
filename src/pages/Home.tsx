@@ -86,10 +86,9 @@ const Home = () => {
             className="absolute inset-0"
           >
             <img 
-              src="https://images.unsplash.com/photo-1615397323625-f5e95738805f?auto=format&fit=crop&q=80&w=1200&h=1600" 
+              src="/images/hero_editorial.png" 
               alt="Skincare Editorial" 
               className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-brand/10 mix-blend-multiply"></div>
           </motion.div>
