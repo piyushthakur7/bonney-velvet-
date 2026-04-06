@@ -70,8 +70,12 @@ const Footer = () => {
         </div>
 
         <div className="mt-16 pt-8 border-t border-zinc-200 text-center">
-          <p className="text-zinc-400 text-xs">
-            © {new Date().getFullYear()} Bonny Velvet. All rights reserved.
+          <p className="text-zinc-400 text-xs flex flex-col md:flex-row items-center justify-center gap-2">
+            <span>© {new Date().getFullYear()} Bonny Velvet. All rights reserved.</span>
+            <span className="hidden md:inline text-zinc-200">|</span>
+            <span>
+              Made by <a href="https://www.webtutorssolution.com" target="_blank" rel="noopener noreferrer" className="text-brand hover:underline font-bold transition-all">Web Tutors Solution</a>
+            </span>
           </p>
         </div>
       </div>
