@@ -30,6 +30,8 @@ const Checkout = () => {
     city: '',
     state: '',
     pincode: '',
+    createAccount: false,
+    password: '',
   });
 
 
@@ -45,7 +47,11 @@ const Checkout = () => {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setFormData({ 
+      ...formData, 
+      [name]: type === 'checkbox' ? checked : value 
+    });
   };
 
   const handlePayment = async (e: React.FormEvent) => {
@@ -97,6 +103,32 @@ const Checkout = () => {
               }]);
 
               if (dbError) throw dbError;
+
+              // 5.5 Create Account if requested
+              if (formData.createAccount && !user) {
+                try {
+                  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                    email: formData.email,
+                    password: formData.password,
+                    options: {
+                      data: {
+                        full_name: formData.name,
+                      },
+                    },
+                  });
+
+                  if (signUpError) throw signUpError;
+
+                  if (signUpData.user) {
+                    await supabase.from('profiles').insert([
+                      { id: signUpData.user.id, email: formData.email, full_name: formData.name }
+                    ]);
+                  }
+                } catch (authError) {
+                  console.error('Account Creation Error:', authError);
+                  // Don't block order success if account creation fails (e.g. rate limit)
+                }
+              }
 
               // 6. Sync Order to WooCommerce (Optional but recommended)
               try {
@@ -224,6 +256,55 @@ const Checkout = () => {
                   </div>
                 </div>
               </div>
+
+              {!user && (
+                <div className="space-y-6 pt-4">
+                  <label className="flex items-center space-x-3 cursor-pointer group w-fit">
+                    <div className="relative flex items-center">
+                      <input
+                        type="checkbox"
+                        name="createAccount"
+                        checked={formData.createAccount}
+                        onChange={handleInputChange}
+                        className="peer h-6 w-6 cursor-pointer appearance-none rounded-lg border-2 border-zinc-200 transition-all checked:bg-brand checked:border-brand"
+                      />
+                      <CheckCircle2 
+                        size={16} 
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100" 
+                      />
+                    </div>
+                    <span className="text-sm font-bold text-brand uppercase tracking-widest">Create an account?</span>
+                  </label>
+
+                  <AnimatePresence>
+                    {formData.createAccount && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="space-y-2 pb-2">
+                          <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Create Password</label>
+                          <div className="relative">
+                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
+                            <input
+                              required
+                              type="password"
+                              name="password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              className="w-full pl-14 pr-6 py-5 bg-zinc-50 border border-zinc-100 rounded-3xl focus:outline-none focus:ring-2 focus:ring-brand/10 focus:border-brand transition-all font-medium text-brand"
+                              placeholder="Min. 6 characters"
+                              minLength={6}
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </section>
 
             <section className="space-y-8">
