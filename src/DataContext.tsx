@@ -37,13 +37,21 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
         if (fetchedProducts.length > 0) {
           setProducts(fetchedProducts);
+        } else {
+          console.log("DEBUG: Using hardcoded products fallback");
+          setProducts(HARDCODED_PRODUCTS as Product[]);
         }
 
         if (fetchedCategories.length > 0) {
           setCategories(fetchedCategories);
+        } else {
+          console.log("DEBUG: Using hardcoded categories fallback");
+          setCategories(HARDCODED_CATEGORIES);
         }
       } catch (err) {
         console.error("DEBUG: Failed to fetch data from WooCommerce:", err);
+        setProducts(HARDCODED_PRODUCTS as Product[]);
+        setCategories(HARDCODED_CATEGORIES);
         setError(`Failed to load products: ${err instanceof Error ? err.message : String(err)}`);
       } finally {
         setLoading(false);

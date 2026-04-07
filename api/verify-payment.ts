@@ -12,8 +12,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Incomplete payment data' });
   }
 
+  const secret = process.env.RAZORPAY_KEY_SECRET || process.env.VITE_RAZORPAY_KEY_SECRET || '';
   const generated_signature = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || '')
+    .createHmac('sha256', secret)
     .update(`${razorpay_order_id}|${razorpay_payment_id}`)
     .digest('hex');
 

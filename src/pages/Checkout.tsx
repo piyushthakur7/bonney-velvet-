@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, CreditCard, Truck, MapPin, Phone, User, Mail } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, CreditCard, Truck, MapPin, Phone, User, Mail, Lock } from 'lucide-react';
 import { useCart } from '../CartContext';
 import { loadRazorpayScript, openRazorpayCheckout, createRazorpayOrder, verifyRazorpayPayment } from '../services/razorpay';
 import { motion, AnimatePresence } from 'motion/react';
@@ -169,6 +169,7 @@ const Checkout = () => {
       openRazorpayCheckout(options);
     } catch (err: any) {
       console.error('Checkout Error:', err);
+      setLoading(false);
       alert(err.message);
     } finally {
       // Don't set loading false here because the popup is open

@@ -12,22 +12,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Amount is required' });
   }
 
-  const instance = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || '',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-  });
-
-  const options = {
-    amount: Math.round(amount * 100), // convert to paise
-    currency,
-    receipt,
-  };
-
   try {
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID || process.env.VITE_RAZORPAY_KEY_ID || '',
+      key_secret: process.env.RAZORPAY_KEY_SECRET || process.env.VITE_RAZORPAY_KEY_SECRET || '',
+    });
+
+    const options = {
+      amount: Math.round(amount * 100), // convert to paise
+      currency,
+      receipt,
+    };
+
     const order = await instance.orders.create(options);
     return res.status(200).json(order);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Razorpay Error:', error);
-    return res.status(500).json({ error: 'Failed to create order' });
+    return res.status(500).json({ error: error.message || 'Failed to create order' });
   }
 }

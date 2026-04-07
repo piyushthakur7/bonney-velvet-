@@ -45,7 +45,19 @@ export const createRazorpayOrder = async (amount: number, receipt: string) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ amount, receipt }),
   });
-  return await response.json();
+
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await response.text();
+    console.error('Non-JSON response from /api/create-order:', text.substring(0, 200));
+    throw new Error('Server error: Payment API is not responding correctly. Please check Vercel environment variables (RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET).');
+  }
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Failed to create order');
+  }
+  return data;
 };
 
 export const verifyRazorpayPayment = async (paymentData: {
@@ -58,7 +70,19 @@ export const verifyRazorpayPayment = async (paymentData: {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(paymentData),
   });
-  return await response.json();
+
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await response.text();
+    console.error('Non-JSON response from /api/verify-payment:', text.substring(0, 200));
+    throw new Error('Server error: Payment verification API is not responding correctly.');
+  }
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Payment verification failed');
+  }
+  return data;
 };
 
 export const openRazorpayCheckout = (options: RazorpayOptions) => {
