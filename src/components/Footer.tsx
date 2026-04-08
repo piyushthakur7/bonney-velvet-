@@ -55,15 +55,15 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start space-x-3 text-sm text-zinc-500">
                 <Mail size={18} className="text-brand shrink-0" />
-                <span>support@bonnyvelvet.com</span>
+                <span>bonnyvelvet33@gmail.com</span>
               </li>
               <li className="flex items-start space-x-3 text-sm text-zinc-500">
                 <Phone size={18} className="text-brand shrink-0" />
-                <span>+91 98765 43210</span>
+                <span>8884770044</span>
               </li>
               <li className="flex items-start space-x-3 text-sm text-zinc-500">
                 <MapPin size={18} className="text-brand shrink-0" />
-                <span>Mumbai, Maharashtra, India</span>
+                <span>Patel nagar near Rajeev nagar beside chanakya collage Hubballi Karnataka 580031</span>
               </li>
             </ul>
           </div>

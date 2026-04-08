@@ -65,9 +65,9 @@ const Contact = () => {
 
             <div className="space-y-8">
               {[
-                { icon: Mail, label: "Email Us", value: "hello@bonnyvelvet.com" },
-                { icon: Phone, label: "Call Us", value: "+91 98765 43210" },
-                { icon: MapPin, label: "Visit Us", value: "123 Velvet Lane, Mumbai, MH 400001" }
+                { icon: Mail, label: "Email Us", value: "bonnyvelvet33@gmail.com" },
+                { icon: Phone, label: "Call Us", value: "8884770044" },
+                { icon: MapPin, label: "Visit Us", value: "Patel nagar near Rajeev nagar beside chanakya collage Hubballi Karnataka 580031" }
               ].map((item, i) => (
                 <div key={i} className="flex items-start space-x-6 group">
                   <div className="w-12 h-12 bg-brand-light rounded-2xl flex items-center justify-center text-brand premium-shadow group-hover:bg-brand group-hover:text-white transition-all duration-500">
