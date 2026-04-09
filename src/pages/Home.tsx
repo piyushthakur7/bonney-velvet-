@@ -9,6 +9,7 @@ import { ArrowRight, Star, ShieldCheck, Zap, ShoppingBag, ArrowUpRight } from 'l
 import { Link } from 'react-router-dom';
 import { useData } from '../DataContext';
 import BrandTrustBar from '../components/BrandTrustBar';
+import VideoShowcase from '../components/VideoShowcase';
 
 
 const concernImages: Record<string, string> = {
@@ -252,6 +253,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Video Showcase Section */}
+      <VideoShowcase />
 
       {/* Customer Reviews Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 pb-32">
