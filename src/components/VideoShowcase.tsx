@@ -242,9 +242,11 @@ const VideoCard: React.FC<{ video: VideoItem; index: number }> = ({ video, index
         <h4 className="text-lg font-display font-bold text-brand tracking-tight leading-snug">
           {video.title}
         </h4>
-        <p className="text-sm text-zinc-400 font-light italic font-serif">
-          {video.subtitle}
-        </p>
+        <div className="pt-2">
+          <span className="inline-block bg-brand text-white text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full">
+            {video.subtitle}
+          </span>
+        </div>
       </div>
     </motion.div>
   );
