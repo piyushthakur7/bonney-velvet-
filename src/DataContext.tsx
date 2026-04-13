@@ -6,7 +6,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product } from './types';
 import { fetchWooCommerceProducts, fetchWooCommerceCategories } from './services/woocommerce';
-import { PRODUCTS as HARDCODED_PRODUCTS, CATEGORIES as HARDCODED_CATEGORIES } from './constants';
 
 interface DataContextType {
   products: Product[];
@@ -27,6 +26,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const loadData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const [fetchedProducts, fetchedCategories] = await Promise.all([
           fetchWooCommerceProducts(),
           fetchWooCommerceCategories()
@@ -35,24 +35,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         console.log("DEBUG: Fetched products count:", fetchedProducts.length);
         console.log("DEBUG: Fetched categories count:", fetchedCategories.length);
 
-        if (fetchedProducts.length > 0) {
-          setProducts(fetchedProducts);
-        } else {
-          console.log("DEBUG: Using hardcoded products fallback");
-          setProducts(HARDCODED_PRODUCTS as Product[]);
-        }
-
-        if (fetchedCategories.length > 0) {
-          setCategories(fetchedCategories);
-        } else {
-          console.log("DEBUG: Using hardcoded categories fallback");
-          setCategories(HARDCODED_CATEGORIES);
-        }
+        setProducts(fetchedProducts);
+        setCategories(fetchedCategories);
       } catch (err) {
         console.error("DEBUG: Failed to fetch data from WooCommerce:", err);
-        setProducts(HARDCODED_PRODUCTS as Product[]);
-        setCategories(HARDCODED_CATEGORIES);
         setError(`Failed to load products: ${err instanceof Error ? err.message : String(err)}`);
+        setProducts([]);
+        setCategories([]);
       } finally {
         setLoading(false);
       }
