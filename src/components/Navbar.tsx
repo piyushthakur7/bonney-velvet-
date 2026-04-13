@@ -82,8 +82,8 @@ const Navbar = () => {
 
           {/* Center: Logo */}
           <div className="flex justify-center flex-1">
-            <Link to="/" className="text-3xl font-display font-medium text-zinc-900 tracking-tight flex items-center">
-              foxtale
+            <Link to="/" className="text-2xl md:text-3xl font-display font-black text-brand tracking-tighter">
+              BONNY<span className="italic font-serif font-light">Velvet</span>
             </Link>
           </div>
 
