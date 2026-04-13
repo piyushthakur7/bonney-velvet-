@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Star } from 'lucide-react';
 import { useData } from '../DataContext';
 import { Product } from '../types';
+import VideoShowcase from '../components/VideoShowcase';
 
 const CATEGORY_IMAGES: Record<string, string> = {
   'Summer Picks': 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=200&h=200',
@@ -116,6 +117,81 @@ const Home = () => {
               No products found in this category.
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Video Showcase Section */}
+      <VideoShowcase />
+
+      {/* Customer Reviews Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 pb-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              name: "Bishal Das",
+              location: "West Bengal",
+              image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=200&h=200",
+              text: "The Velvet website is a fantastic resource, offering a sleek collection, serums, creams, and useful tools. It's regularly updated with great content. However the most awesome thing is that the prices are all budget friendly for the quality. And no doubt about the service they provide instant reply and solutions 😊"
+            },
+            {
+              name: "Adhiraj",
+              location: "Nagpur",
+              image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200",
+              text: "Hands Down the best store in India for all skincare related stuff! Super high class products along with wide selection of stock is just the cherry on top! The packaging is top notch and the product always reaches without a single scratch! Thank you Velvet for being my one-stop shop for all things skin!"
+            },
+            {
+              name: "Aditya Kaushik",
+              location: "Delhi",
+              image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200&h=200",
+              text: "One of the most diverse collections I have seen anywhere on the web, I got two newly launched glow serums which were promptly delivered. Have also been using Velvet moisturizers for a while now. Top tier stuff undoubtedly for a fraction of the price at which other luxury places sell. Pricing is too affordable!!"
+            }
+          ].map((review, i) => (
+            <motion.div 
+              key={review.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true }}
+              className="border border-brand/10 bg-brand-light p-8 lg:p-12 flex flex-col items-center text-center space-y-6"
+            >
+              <div className="space-y-2">
+                <div className="w-20 h-20 mx-auto rounded-full overflow-hidden mb-6 border border-brand/20 p-1 bg-white">
+                  <img src={review.image} alt={review.name} className="w-full h-full object-cover rounded-full" />
+                </div>
+                <h4 className="font-bold text-brand uppercase tracking-widest text-sm">{review.name}</h4>
+                <p className="text-sm text-zinc-500 font-serif italic">{review.location}</p>
+              </div>
+              
+              <p className="text-zinc-600 font-light leading-relaxed text-base flex-1">
+                {review.text}
+              </p>
+              
+              <div className="w-14 h-14 bg-zinc-900 rounded-full flex items-center justify-center mt-6">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Marketplace & Trust */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-zinc-900 rounded-[4rem] p-16 md:p-24 text-center space-y-12 overflow-hidden relative">
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand via-transparent to-transparent"></div>
+          </div>
+          
+          <div className="relative z-10 space-y-6">
+            <h3 className="text-sm font-bold text-brand uppercase tracking-[0.4em]">Available Worldwide</h3>
+            <h2 className="text-4xl md:text-6xl font-display font-black text-white tracking-tighter">FIND US ON</h2>
+            <div className="flex flex-wrap justify-center items-center gap-16 pt-8">
+              <span className="text-3xl md:text-5xl font-black italic text-white/20 hover:text-[#FF9900] transition-colors cursor-pointer">amazon</span>
+              <span className="text-3xl md:text-5xl font-black text-white/20 hover:text-[#2874F0] transition-colors cursor-pointer">Flipkart</span>
+              <span className="text-3xl md:text-5xl font-black text-white/20 hover:text-brand transition-colors cursor-pointer">Nykaa</span>
+            </div>
+          </div>
         </div>
       </section>
     </div>
