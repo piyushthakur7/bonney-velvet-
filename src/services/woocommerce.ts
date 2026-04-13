@@ -73,6 +73,7 @@ export const fetchWooCommerceProducts = async (): Promise<Product[]> => {
       // Map attributes like 'concern', 'benefits', 'ingredients' if they exist
       concern: p.attributes?.find((a: any) => a.name.toLowerCase() === 'concern')?.options || [],
       image: p.images?.length > 0 ? p.images[0].src : 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800',
+      images: p.images?.length > 0 ? p.images.map((img: any) => img.src) : ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800'],
       description: p.short_description?.replace(/<[^>]*>?/gm, '') || p.description?.replace(/<[^>]*>?/gm, ''),
       benefits: p.attributes?.find((a: any) => a.name.toLowerCase() === 'benefits')?.options || [],
       ingredients: p.attributes?.find((a: any) => a.name.toLowerCase() === 'ingredients')?.options || [],

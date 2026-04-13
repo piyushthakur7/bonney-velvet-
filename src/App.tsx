@@ -24,6 +24,7 @@ import Signup from './pages/Signup';
 import Account from './pages/Account';
 import ProtectedRoute from './components/ProtectedRoute';
 import { PrivacyPolicy, Terms, RefundPolicy, ShippingPolicy } from './pages/Policies';
+import BottomFloatingBanner from './components/BottomFloatingBanner';
 
 export default function App() {
   return (
@@ -60,6 +61,7 @@ export default function App() {
                 </Routes>
               </main>
               <Footer />
+              <BottomFloatingBanner />
             </div>
           </Router>
         </CartProvider>

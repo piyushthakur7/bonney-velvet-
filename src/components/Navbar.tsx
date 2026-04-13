@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [showTopBanner, setShowTopBanner] = React.useState(true);
   const [scrolled, setScrolled] = React.useState(false);
   const { totalItems } = useCart();
   const location = useLocation();
@@ -32,78 +33,98 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      scrolled || isOpen ? 'bg-white/95 backdrop-blur-xl py-4 premium-shadow' : 'bg-transparent py-8'
-    }`}>
+    <div className="fixed top-0 left-0 right-0 z-50">
+      <AnimatePresence>
+        {showTopBanner && (
+          <motion.div
+            initial={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            className="bg-[#fce882] relative z-50 text-center py-2 px-4 flex items-center justify-center font-semibold text-sm"
+          >
+            Buy 2 Get 4 Free
+            <button 
+              onClick={() => setShowTopBanner(false)} 
+              className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
+            >
+              <X size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <nav className={`transition-all duration-500 w-full ${
+        scrolled || isOpen ? 'bg-white/95 backdrop-blur-xl py-3 premium-shadow' : 'bg-white py-4'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          {/* Desktop Links Left */}
-          <div className="hidden md:flex items-center space-x-10">
-            {navLinks.slice(0, 2).map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-brand ${
-                  location.pathname === link.path ? 'text-brand' : 'text-zinc-500'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl md:text-3xl font-display font-black text-brand tracking-tighter">
-              BONNY<span className="italic font-serif font-light">Velvet</span>
-            </Link>
-          </div>
-
-          {/* Desktop Links Right */}
-          <div className="flex items-center">
-            <div className="hidden md:flex items-center space-x-10 mr-8">
-              {navLinks.slice(2).map((link) => (
+        <div className="flex justify-between items-center relative">
+          
+          {/* Left: Mobile Menu Toggle & Search */}
+          <div className="flex items-center space-x-4 flex-1">
+            <button
+              className="p-2 text-zinc-900 -ml-2"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <div className="hidden md:flex items-center space-x-6">
+               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-brand ${
-                    location.pathname === link.path ? 'text-brand' : 'text-zinc-500'
+                  className={`text-[12px] font-bold uppercase tracking-[0.1em] transition-all hover:text-brand ${
+                    location.pathname === link.path ? 'text-brand' : 'text-zinc-600'
                   }`}
                 >
                   {link.name}
                 </Link>
               ))}
             </div>
-            
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <button className="p-2 text-zinc-400 hover:text-brand transition-colors hidden sm:block">
-                <Search size={18} />
-              </button>
-              
-              {user ? (
-                <Link to="/account" className={`p-2 transition-colors ${location.pathname === '/account' ? 'text-brand' : 'text-zinc-400 hover:text-brand'}`}>
-                  <UserIcon size={18} />
-                </Link>
-              ) : (
-                <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-brand transition-colors pr-2">
-                  Login
-                </Link>
-              )}
+          </div>
 
-              <Link to="/cart" className="relative p-2 text-zinc-400 hover:text-brand transition-colors">
-                <ShoppingBag size={18} />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-brand text-white text-[8px] font-black w-4 h-4 flex items-center justify-center rounded-full">
-                    {totalItems}
-                  </span>
-                )}
+          {/* Center: Logo */}
+          <div className="flex justify-center flex-1">
+            <Link to="/" className="text-3xl font-display font-medium text-zinc-900 tracking-tight flex items-center">
+              foxtale
+            </Link>
+          </div>
+
+          {/* Right: Icons */}
+          <div className="flex items-center justify-end space-x-2 sm:space-x-4 flex-1">
+            <button className="p-2 text-zinc-900 hover:text-brand transition-colors">
+              <Search size={22} strokeWidth={2.5} />
+            </button>
+            
+            {user ? (
+              <Link to="/account" className="p-2 text-zinc-900 hover:text-brand transition-colors relative flex items-center">
+                <Search size={20} className="opacity-0" /> {/* Spacer */}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-[22px] h-[22px] absolute inset-0 m-auto">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                <div className="absolute -top-1 -right-2 text-[#ff9900]">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
               </Link>
-              <button
-                className="md:hidden p-2 text-zinc-600 ml-2"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+            ) : (
+              <Link to="/login" className="p-2 text-zinc-900 hover:text-brand transition-colors relative flex items-center">
+                <Search size={20} className="opacity-0" /> {/* Spacer */}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-[22px] h-[22px] absolute inset-0 m-auto">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                <div className="absolute -top-0.5 -right-1 text-[#ff9900]">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+              </Link>
+            )}
+
+            <Link to="/cart" className="relative p-2 text-zinc-900 hover:text-brand transition-colors">
+              <ShoppingBag size={22} strokeWidth={2.5} />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-brand text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
       </div>
@@ -154,7 +175,8 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-    </nav>
+      </nav>
+    </div>
   );
 };
 
