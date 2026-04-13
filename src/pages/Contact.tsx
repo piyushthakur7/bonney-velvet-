@@ -53,7 +53,7 @@ const Contact = () => {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-24">
           {/* Contact Info: 5 Columns */}
           <div className="lg:col-span-5 space-y-16">
             <div className="space-y-8">
@@ -95,7 +95,7 @@ const Contact = () => {
 
           {/* Contact Form: 7 Columns */}
           <div className="lg:col-span-7">
-            <div className="bg-zinc-50 p-12 md:p-16 rounded-[4rem] premium-shadow border border-zinc-100 relative overflow-hidden">
+            <div className="bg-zinc-50 p-8 md:p-16 rounded-[2rem] md:rounded-[4rem] premium-shadow border border-zinc-100 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
               
               <form onSubmit={handleSubmit} className="relative z-10 space-y-8">

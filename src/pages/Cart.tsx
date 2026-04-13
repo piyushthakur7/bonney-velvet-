@@ -32,7 +32,7 @@ const Cart = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12">
       <h1 className="text-3xl sm:text-4xl font-display font-black text-brand tracking-tight mb-12">Your Shopping Bag</h1>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16">
         {/* Items */}
         <div className="lg:col-span-2 space-y-8">
           {cart.map((item) => (

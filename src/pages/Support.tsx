@@ -138,7 +138,7 @@ const Support = () => {
 
       {/* FAQ Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 md:mt-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
           {/* FAQ Heading */}
           <div className="lg:col-span-4 space-y-8">
             <div className="space-y-6">
@@ -175,7 +175,7 @@ const Support = () => {
 
       {/* Contact Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 md:mt-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
 
           {/* Contact Heading */}
           <div className="lg:col-span-4 space-y-8">
@@ -195,7 +195,7 @@ const Support = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-8">
-            <div className="bg-zinc-50 p-8 md:p-16 rounded-[3rem] premium-shadow border border-zinc-100 relative overflow-hidden">
+            <div className="bg-zinc-50 p-6 md:p-16 rounded-[2rem] md:rounded-[3rem] premium-shadow border border-zinc-100 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-brand/3 rounded-full -ml-24 -mb-24 blur-3xl"></div>
 

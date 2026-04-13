@@ -215,7 +215,7 @@ const Checkout = () => {
         <h1 className="text-4xl font-display font-black text-brand tracking-tight ml-4 italic">Checkout</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
         {/* Form */}
         <div className="lg:col-span-7">
           <form id="checkout-form" onSubmit={handlePayment} className="space-y-12">
@@ -386,7 +386,7 @@ const Checkout = () => {
 
         {/* Sidebar Summary */}
         <div className="lg:col-span-5">
-          <div className="bg-zinc-50 rounded-[3rem] p-10 space-y-10 sticky top-24">
+          <div className="bg-zinc-50 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 space-y-8 md:space-y-10 sticky top-24">
             <h3 className="text-xl font-bold text-brand uppercase tracking-wider italic">Order Summary</h3>
             
             <div className="space-y-6 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">

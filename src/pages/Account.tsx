@@ -47,7 +47,7 @@ const Account = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50/50 pb-24 pt-32">
+    <div className="min-h-screen bg-zinc-50/50 pb-16 md:pb-24 pt-24 md:pt-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Sidebar */}
@@ -55,7 +55,7 @@ const Account = () => {
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white rounded-[3rem] p-10 premium-shadow space-y-8"
+              className="bg-white rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 premium-shadow space-y-8"
             >
               <div className="flex items-center space-x-6">
                 <div className="w-20 h-20 bg-brand text-white rounded-[2rem] flex items-center justify-center">
@@ -99,7 +99,7 @@ const Account = () => {
               </div>
             </motion.div>
 
-            <div className="bg-brand rounded-[3rem] p-10 text-white space-y-6 relative overflow-hidden">
+            <div className="bg-brand rounded-[2rem] md:rounded-[3rem] p-8 md:p-10 text-white space-y-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
               <h3 className="text-xl font-display font-black tracking-tight leading-none">Need Help?</h3>
               <p className="text-white/70 text-sm font-light leading-relaxed">Our support team is available 24/7 to help you with your orders.</p>
@@ -122,7 +122,7 @@ const Account = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="bg-white rounded-[3rem] p-8 md:p-10 premium-shadow border border-zinc-100 flex flex-col md:flex-row md:items-center justify-between gap-8 group hover:border-brand/20 transition-all"
+                    className="bg-white rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 premium-shadow border border-zinc-100 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 group hover:border-brand/20 transition-all"
                   >
                     <div className="flex items-center space-x-6">
                       <div className="w-16 h-16 bg-brand-light rounded-2xl flex items-center justify-center text-brand">
@@ -164,7 +164,7 @@ const Account = () => {
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-[4rem] p-24 text-center space-y-10 premium-shadow border border-zinc-100 border-dashed">
+              <div className="bg-white rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 text-center space-y-8 md:space-y-10 premium-shadow border border-zinc-100 border-dashed">
                 <div className="w-24 h-24 bg-zinc-50 text-zinc-200 rounded-full flex items-center justify-center mx-auto">
                   <Package size={48} />
                 </div>

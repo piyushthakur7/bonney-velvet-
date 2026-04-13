@@ -178,7 +178,7 @@ const Home = () => {
 
       {/* Marketplace & Trust */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-zinc-900 rounded-[4rem] p-16 md:p-24 text-center space-y-12 overflow-hidden relative">
+        <div className="bg-zinc-900 rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 text-center space-y-8 md:space-y-12 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand via-transparent to-transparent"></div>
           </div>
@@ -186,7 +186,7 @@ const Home = () => {
           <div className="relative z-10 space-y-6">
             <h3 className="text-sm font-bold text-brand uppercase tracking-[0.4em]">Available Worldwide</h3>
             <h2 className="text-4xl md:text-6xl font-display font-black text-white tracking-tighter">FIND US ON</h2>
-            <div className="flex flex-wrap justify-center items-center gap-16 pt-8">
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 pt-8">
               <span className="text-3xl md:text-5xl font-black italic text-white/20 hover:text-[#FF9900] transition-colors cursor-pointer">amazon</span>
               <span className="text-3xl md:text-5xl font-black text-white/20 hover:text-[#2874F0] transition-colors cursor-pointer">Flipkart</span>
               <span className="text-3xl md:text-5xl font-black text-white/20 hover:text-brand transition-colors cursor-pointer">Nykaa</span>

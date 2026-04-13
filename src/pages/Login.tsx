@@ -34,7 +34,7 @@ const Login = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full bg-white rounded-[3rem] p-10 md:p-16 premium-shadow space-y-8"
+        className="max-w-md w-full bg-white rounded-[2rem] md:rounded-[3rem] p-6 md:p-16 premium-shadow space-y-8"
       >
         <div className="text-center space-y-4">
           <Link to="/" className="text-3xl font-display font-black text-brand tracking-tighter inline-block">

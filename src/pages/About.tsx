@@ -45,7 +45,7 @@ const About = () => {
 
       {/* Editorial Split Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24 items-center">
           <div className="space-y-12">
             <div className="space-y-6">
               <h2 className="text-5xl font-display font-black text-brand leading-[0.9] tracking-tighter">
@@ -126,7 +126,7 @@ const About = () => {
 
       {/* Certified Excellence */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-48">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-24">
           <div className="lg:col-span-5 space-y-12">
             <div className="space-y-6">
               <h2 className="text-5xl font-display font-black text-brand leading-[0.9] tracking-tighter">
@@ -154,7 +154,7 @@ const About = () => {
       {/* CTA Section */}
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-32">
-        <div className="bg-brand rounded-[4rem] p-16 md:p-24 text-center space-y-12 relative overflow-hidden">
+        <div className="bg-brand rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 text-center space-y-8 md:space-y-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
           <div className="relative z-10 space-y-6">
             <h2 className="text-5xl md:text-7xl font-display font-black text-white tracking-tighter leading-[0.9]">
