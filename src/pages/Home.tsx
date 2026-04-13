@@ -11,31 +11,16 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'Masks': 'https://images.unsplash.com/photo-1615397323625-f5e95738805f?auto=format&fit=crop&q=80&w=200&h=200',
 };
 
-// BUBBLE_CATEGORIES removed, we will use dynamic categories from WooCommerce
+const BUBBLE_CATEGORIES = ['Summer Picks', 'Sunscreens', 'Serums', 'Masks'];
 
 const Home = () => {
-  const { products, categories, loading } = useData();
-  const [activeCategory, setActiveCategory] = useState('');
+  const { products, loading } = useData();
+  const [activeCategory, setActiveCategory] = useState('Summer Picks');
 
-  // Default to the first category once loaded
-  React.useEffect(() => {
-    if (categories.length > 0 && !activeCategory) {
-      setActiveCategory(categories[0]);
-    }
-  }, [categories, activeCategory]);
-
-  const filteredProducts = activeCategory 
-    ? products.filter(p => p.category === activeCategory)
-    : products;
-
-  // Helper to get an image for a category
-  // If it's in our predefined map, use it. Otherwise, use the image of the first product in that category.
-  const getCategoryImage = (catName: string) => {
-    if (CATEGORY_IMAGES[catName]) return CATEGORY_IMAGES[catName];
-    const categoryProducts = products.filter(p => p.category === catName);
-    if (categoryProducts.length > 0) return categoryProducts[0].image;
-    return 'https://images.unsplash.com/photo-1615397323625-f5e95738805f?auto=format&fit=crop&q=80&w=200&h=200'; // Default fallback
-  };
+  // We mock the "Summer Picks" by taking the first 4 products, else filter by category
+  const filteredProducts = activeCategory === 'Summer Picks' 
+    ? products.slice(0, 4) 
+    : products.filter(p => p.category === activeCategory);
 
   if (loading) {
     return (
@@ -90,7 +75,7 @@ const Home = () => {
       <section className="bg-white border-b border-zinc-100 sticky top-[110px] z-40 shadow-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex overflow-x-auto hide-scrollbar px-4 py-6 gap-6 sm:gap-10 sm:justify-center">
-            {categories.map((cat) => {
+            {BUBBLE_CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat;
               return (
                 <button 
@@ -100,7 +85,7 @@ const Home = () => {
                 >
                   <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden flex items-center justify-center transition-all ${isActive ? 'bg-[#fef08a] p-1 shadow-md scale-105' : 'bg-orange-50 p-1 group-hover:scale-105 group-hover:bg-[#fef08a]'}`}>
                     <img 
-                      src={getCategoryImage(cat)} 
+                      src={CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Summer Picks']} 
                       alt={cat}
                       className="w-full h-full object-cover rounded-full mix-blend-multiply"
                     />
