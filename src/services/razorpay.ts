@@ -40,24 +40,37 @@ export const loadRazorpayScript = (): Promise<boolean> => {
 };
 
 export const createRazorpayOrder = async (amount: number, receipt: string) => {
-  const response = await fetch('/api/create-order', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ amount, receipt }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  const contentType = response.headers.get('content-type');
-  if (!contentType || !contentType.includes('application/json')) {
-    const text = await response.text();
-    console.error('Non-JSON response from /api/create-order:', text.substring(0, 200));
-    throw new Error('Server error: Payment API is not responding correctly. Please check Vercel environment variables (RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET).');
-  }
+  try {
+    const response = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount, receipt }),
+      signal: controller.signal
+    });
 
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Failed to create order');
+    clearTimeout(timeoutId);
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response from /api/create-order:', text.substring(0, 200));
+      throw new Error('Server error: Payment API is not responding correctly.');
+    }
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to create order');
+    }
+    return data;
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error('Connection timed out. Please check your internet and try again.');
+    }
+    throw err;
   }
-  return data;
 };
 
 export const verifyRazorpayPayment = async (paymentData: {
@@ -65,24 +78,37 @@ export const verifyRazorpayPayment = async (paymentData: {
   razorpay_payment_id: string;
   razorpay_signature: string;
 }) => {
-  const response = await fetch('/api/verify-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(paymentData),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  const contentType = response.headers.get('content-type');
-  if (!contentType || !contentType.includes('application/json')) {
-    const text = await response.text();
-    console.error('Non-JSON response from /api/verify-payment:', text.substring(0, 200));
-    throw new Error('Server error: Payment verification API is not responding correctly.');
-  }
+  try {
+    const response = await fetch('/api/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(paymentData),
+      signal: controller.signal
+    });
 
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Payment verification failed');
+    clearTimeout(timeoutId);
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response from /api/verify-payment:', text.substring(0, 200));
+      throw new Error('Server error: Payment verification API is not responding correctly.');
+    }
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Payment verification failed');
+    }
+    return data;
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error('Verification timed out. Your order may still be processing; please check your account in a moment.');
+    }
+    throw err;
   }
-  return data;
 };
 
 export const openRazorpayCheckout = (options: RazorpayOptions) => {
