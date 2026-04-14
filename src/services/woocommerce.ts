@@ -1,8 +1,10 @@
 import { Product, CartItem } from '../types';
 
 // Configuration for WooCommerce integration
-// Set these values in your .env file
-const WC_API_URL = (import.meta.env.VITE_WC_API_URL || 'https://your-wordpress-site.com/wp-json/wc/v3').replace(/\/$/, '');
+// In dev mode, use the Vite proxy to bypass CORS. In production, use the direct URL.
+const isDev = import.meta.env.DEV;
+const WC_API_URL_DIRECT = (import.meta.env.VITE_WC_API_URL || 'https://your-wordpress-site.com/wp-json/wc/v3').replace(/\/$/, '');
+const WC_API_URL = isDev ? '/wc-api' : WC_API_URL_DIRECT;
 const WC_CONSUMER_KEY = import.meta.env.VITE_WC_CONSUMER_KEY || '';
 const WC_CONSUMER_SECRET = import.meta.env.VITE_WC_CONSUMER_SECRET || '';
 
@@ -18,7 +20,7 @@ export const fetchWooCommerceCategories = async (): Promise<string[]> => {
   }
 
   try {
-    const url = new URL(`${WC_API_URL}/products/categories`);
+    const url = new URL(`${WC_API_URL}/products/categories`, window.location.origin);
     url.searchParams.append('consumer_key', WC_CONSUMER_KEY);
     url.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
     url.searchParams.append('per_page', '100');
@@ -50,7 +52,7 @@ export const fetchWooCommerceProducts = async (): Promise<Product[]> => {
   }
 
   try {
-    const url = new URL(`${WC_API_URL}/products`);
+    const url = new URL(`${WC_API_URL}/products`, window.location.origin);
     url.searchParams.append('consumer_key', WC_CONSUMER_KEY);
     url.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
     url.searchParams.append('per_page', '100'); // Fetch more products
@@ -80,6 +82,8 @@ export const fetchWooCommerceProducts = async (): Promise<Product[]> => {
       howToUse: p.attributes?.find((a: any) => a.name.toLowerCase() === 'how to use')?.options?.[0] || 'Apply as directed.',
       results: p.attributes?.find((a: any) => a.name.toLowerCase() === 'results')?.options?.[0] || 'Visible glow.',
       stock: p.stock_quantity || 100,
+      variants: p.attributes?.find((a: any) => a.variation === true || a.name.toLowerCase() === 'size' || a.name.toLowerCase() === 'volume')
+        ?.options?.map((opt: string) => ({ name: opt, value: opt })) || []
     }));
   } catch (error) {
     console.error('Error fetching products from WooCommerce:', error);
@@ -139,7 +143,7 @@ export const createWooCommerceOrder = async (
       customer_note: `Razorpay Payment ID: ${paymentId}`,
     };
 
-    const url = new URL(`${WC_API_URL}/orders`);
+    const url = new URL(`${WC_API_URL}/orders`, window.location.origin);
     url.searchParams.append('consumer_key', WC_CONSUMER_KEY);
     url.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
 

@@ -86,6 +86,24 @@ export const verifyRazorpayPayment = async (paymentData: {
 };
 
 export const openRazorpayCheckout = (options: RazorpayOptions) => {
+  // --- MOCK MODE HANDLER ---
+  if (options.order_id?.startsWith('order_mock_')) {
+    console.warn('MOCK MODE: Simulating Razorpay success...');
+    setTimeout(() => {
+      options.handler({
+        razorpay_order_id: options.order_id,
+        razorpay_payment_id: `pay_mock_${Math.random().toString(36).substring(7)}`,
+        razorpay_signature: 'mock_signature'
+      });
+    }, 1500);
+    return;
+  }
+
+  if (typeof window.Razorpay === 'undefined') {
+    console.error('Razorpay SDK not loaded');
+    return;
+  }
+
   const rzp = new window.Razorpay(options);
   rzp.open();
 };
