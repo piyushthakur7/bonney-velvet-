@@ -18,15 +18,16 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { products, loading } = useData();
   const { addToCart } = useCart();
+
+  const product = products.find(p => p.id === id);
+
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [isAdded, setIsAdded] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState(
+  const [selectedVariant, setSelectedVariant] = useState<string | undefined>(
     product?.variants && product.variants.length > 0 ? product.variants[0].value : undefined
   );
-
-  const product = products.find(p => p.id === id);
 
   if (loading) {
     return (
@@ -240,7 +241,7 @@ const ProductDetail = () => {
                         className="flex items-center justify-center space-x-3"
                       >
                         <ShoppingBag size={18} />
-                        <span>Add to Cart</span>
+                        <span>Add to Bag</span>
                       </motion.span>
                     )}
                   </AnimatePresence>

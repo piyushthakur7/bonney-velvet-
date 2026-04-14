@@ -36,7 +36,7 @@ const Cart = () => {
         {/* Items */}
         <div className="lg:col-span-2 space-y-8">
           {cart.map((item) => (
-            <div key={item.id} className="flex flex-col sm:flex-row sm:space-x-6 pb-8 border-b border-zinc-100 gap-6">
+            <div key={`${item.id}-${item.selectedVariant || 'default'}`} className="flex flex-col sm:flex-row sm:space-x-6 pb-8 border-b border-zinc-100 gap-6">
               <div className="w-full sm:w-24 aspect-[4/5] sm:aspect-auto sm:h-32 bg-zinc-100 rounded-2xl overflow-hidden shrink-0">
                 <img src={item.image} alt={item.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>

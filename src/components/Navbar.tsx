@@ -232,7 +232,7 @@ const Navbar = () => {
                 <div className="space-y-4">
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Quick Links</h4>
                   <div className="flex flex-col space-y-3">
-                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Cleansers" className="text-sm font-bold text-zinc-600 hover:text-brand">Cleansers</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Sunscreens" className="text-sm font-bold text-zinc-600 hover:text-brand">Sunscreens</Link>
                     <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Serums" className="text-sm font-bold text-zinc-600 hover:text-brand">Serums</Link>
                     <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Moisturizers" className="text-sm font-bold text-zinc-600 hover:text-brand">Moisturizers</Link>
                   </div>

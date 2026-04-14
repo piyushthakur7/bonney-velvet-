@@ -12,6 +12,9 @@ interface CartContextType {
   removeFromCart: (productId: string, variant?: string) => void;
   updateQuantity: (productId: string, quantity: number, variant?: string) => void;
   clearCart: () => void;
+  totalItems: number;
+  subtotal: number;
+  shippingFee: number;
   total: number;
   toast: { message: string; visible: boolean } | null;
   hideToast: () => void;
@@ -40,10 +43,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             : item
         );
       }
-      setToast({ message: `${product.name} added to bag`, visible: true });
-      setTimeout(() => setToast(null), 3000);
       return [...prev, { ...product, quantity, selectedVariant: variant }];
     });
+    setToast({ message: `${product.name} added to bag`, visible: true });
+    setTimeout(() => setToast(null), 3000);
   };
 
   const hideToast = () => setToast(null);

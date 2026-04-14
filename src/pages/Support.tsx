@@ -30,7 +30,7 @@ const faqs = [
   },
 ];
 
-const FAQItem = ({ question, answer, isOpen, onClick, index }: { question: string; answer: string; isOpen: boolean; onClick: () => void; index: number }) => (
+const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void; index: number }> = ({ question, answer, isOpen, onClick, index }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}

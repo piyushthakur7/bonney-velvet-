@@ -203,7 +203,7 @@ export default Home;
 
 // --- Sub-Components for the specifically designed Product Card ---
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const { addToCart } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(
