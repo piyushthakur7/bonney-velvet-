@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, CreditCard, Truck, MapPin, Phone, User, Mail, Lock } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, CreditCard, Truck, MapPin, Phone, User, Mail, Lock, Package } from 'lucide-react';
 import { useCart } from '../CartContext';
 import { loadRazorpayScript, openRazorpayCheckout, createRazorpayOrder, verifyRazorpayPayment } from '../services/razorpay';
 import { motion, AnimatePresence } from 'motion/react';
@@ -21,6 +21,9 @@ const Checkout = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showMockModal, setShowMockModal] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState<string>('');
+  const [mockOptions, setMockOptions] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -71,7 +74,7 @@ const Checkout = () => {
         throw new Error('Failed to create secure order');
       }
 
-      // 3. Open Razorpay Checkout
+      // 3. Prepare Razorpay Options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
         amount: orderData.amount,
@@ -80,82 +83,7 @@ const Checkout = () => {
         description: 'Order Payment',
         image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=100&h=100',
         order_id: orderData.id,
-        handler: async (response: any) => {
-          try {
-            setLoading(true);
-            // 4. Verify Payment on Backend
-            const verification = await verifyRazorpayPayment({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verification.status === 'success') {
-              // 5. Save Order to Supabase
-              const { error: dbError } = await supabase.from('orders').insert([{
-                user_id: user?.id,
-                amount: total,
-                status: 'paid',
-                payment_id: response.razorpay_payment_id,
-                order_id: response.razorpay_order_id,
-                shipping_details: formData,
-                total_items: cart.length
-              }]);
-
-              if (dbError) throw dbError;
-
-              // 5.5 Create Account if requested
-              if (formData.createAccount && !user) {
-                try {
-                  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-                    email: formData.email,
-                    password: formData.password,
-                    options: {
-                      data: {
-                        full_name: formData.name,
-                      },
-                    },
-                  });
-
-                  if (signUpError) throw signUpError;
-
-                  if (signUpData.user) {
-                    await supabase.from('profiles').insert([
-                      { id: signUpData.user.id, email: formData.email, full_name: formData.name }
-                    ]);
-                  }
-                } catch (authError) {
-                  console.error('Account Creation Error:', authError);
-                  // Don't block order success if account creation fails (e.g. rate limit)
-                }
-              }
-
-              // 6. Sync Order to WooCommerce (Optional but recommended)
-              try {
-                await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
-              } catch (wcError) {
-                console.error('WooCommerce Sync Error:', wcError);
-              }
-
-              // 7. Sync Order to Shiprocket for Fulfillment
-              try {
-                await syncOrderToShiprocket(cart, formData, total);
-              } catch (srError) {
-                console.error('Shiprocket Sync Error:', srError);
-              }
-
-              setSuccess(true);
-              clearCart();
-            } else {
-              alert('Payment verification failed');
-            }
-          } catch (err: any) {
-            console.error('Finalization Error:', err);
-            alert('Error finalizing order: ' + err.message);
-          } finally {
-            setLoading(false);
-          }
-        },
+        handler: (res: any) => finalizeOrder(res),
         prefill: {
           name: formData.name || user?.user_metadata?.full_name,
           email: formData.email || user?.email,
@@ -166,14 +94,95 @@ const Checkout = () => {
         },
       };
 
-      openRazorpayCheckout(options);
+      if (orderData.mock || orderData.id?.startsWith('order_mock_')) {
+        setMockOptions(options);
+        setShowMockModal(true);
+        setLoading(false);
+      } else {
+        openRazorpayCheckout(options);
+      }
     } catch (err: any) {
       console.error('Checkout Error:', err);
       setLoading(false);
       alert(err.message);
+    }
+  };
+
+  const finalizeOrder = async (response: any) => {
+    try {
+      setLoading(true);
+      // 4. Verify Payment on Backend
+      const verification = await verifyRazorpayPayment({
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+      });
+
+      if (verification.status === 'success') {
+        setCreatedOrderId(response.razorpay_order_id);
+        // 5. Save Order to Supabase
+        const { error: dbError } = await supabase.from('orders').insert([{
+          user_id: user?.id,
+          amount: total,
+          status: 'paid',
+          payment_id: response.razorpay_payment_id,
+          order_id: response.razorpay_order_id,
+          shipping_details: formData,
+          total_items: cart.length
+        }]);
+
+        if (dbError) throw dbError;
+
+        // 5.5 Create Account if requested
+        if (formData.createAccount && !user) {
+          try {
+            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+              email: formData.email,
+              password: formData.password,
+              options: {
+                data: {
+                  full_name: formData.name,
+                },
+              },
+            });
+
+            if (signUpError) throw signUpError;
+
+            if (signUpData.user) {
+              await supabase.from('profiles').insert([
+                { id: signUpData.user.id, email: formData.email, full_name: formData.name }
+              ]);
+            }
+          } catch (authError) {
+            console.error('Account Creation Error:', authError);
+          }
+        }
+
+        // 6. Sync Order to WooCommerce (Optional but recommended)
+        try {
+          await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
+        } catch (wcError) {
+          console.error('WooCommerce Sync Error:', wcError);
+        }
+
+        // 7. Sync Order to Shiprocket for Fulfillment
+        try {
+          await syncOrderToShiprocket(cart, formData, total);
+        } catch (srError) {
+          console.error('Shiprocket Sync Error:', srError);
+        }
+
+        setSuccess(true);
+        clearCart();
+      } else {
+        alert('Payment verification failed');
+      }
+    } catch (err: any) {
+      console.error('Finalization Error:', err);
+      alert('Error finalizing order: ' + err.message);
     } finally {
-      // Don't set loading false here because the popup is open
-      // We set it false after verification or on error
+      setLoading(false);
+      setShowMockModal(false);
     }
   };
 
@@ -192,7 +201,17 @@ const Checkout = () => {
           <div className="space-y-4">
             <h1 className="text-4xl font-display font-black text-brand tracking-tight">Thank You!</h1>
             <p className="text-zinc-500 font-light leading-relaxed">
-              Your order has been placed successfully. You will receive a confirmation email shortly.
+              Your order <span className="text-brand font-bold">#{createdOrderId.slice(0, 8)}</span> has been placed successfully. 
+            </p>
+            <div className="bg-zinc-50 p-6 rounded-3xl space-y-3">
+              <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Order Status</p>
+              <div className="flex items-center justify-center space-x-2 text-green-600 font-bold">
+                <Package size={16} />
+                <span>Payment Verified & Confirmed</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-4">
+              Track your ritual in <Link to="/account" className="text-brand underline">My Orders</Link>
             </p>
           </div>
           <Link 
@@ -205,6 +224,57 @@ const Checkout = () => {
       </div>
     );
   }
+
+  const MockPaymentModal = () => (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="bg-white max-w-sm w-full rounded-[3rem] p-10 text-center space-y-8 premium-shadow"
+      >
+        <div className="w-20 h-20 bg-brand-light rounded-3xl mx-auto flex items-center justify-center text-brand">
+          <CreditCard size={32} />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-2xl font-display font-black text-brand italic">Razorpay <span className="text-zinc-300">Simulated</span></h3>
+          <p className="text-sm text-zinc-500 font-light px-4">This is a simulated interface because your Razorpay keys are in "Mock Mode".</p>
+        </div>
+        
+        <div className="bg-zinc-50 p-6 rounded-3xl text-left space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Amount</span>
+            <span className="font-bold text-brand">₹{total}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Order ID</span>
+            <span className="font-bold text-zinc-600 text-[10px] truncate max-w-[120px]">{mockOptions?.order_id}</span>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <button 
+            onClick={() => finalizeOrder({
+              razorpay_order_id: mockOptions.order_id,
+              razorpay_payment_id: `pay_mock_${Math.random().toString(36).substring(7)}`,
+              razorpay_signature: 'mock_signature'
+            })}
+            className="w-full bg-brand text-white font-bold py-5 rounded-full hover:bg-brand/90 transition-all uppercase tracking-widest text-[10px] premium-shadow"
+          >
+            Simulate Successful Payment
+          </button>
+          <button 
+            onClick={() => {
+              setShowMockModal(false);
+              setLoading(false);
+            }}
+            className="text-[10px] font-black text-zinc-400 uppercase tracking-widest hover:text-red-500 transition-colors"
+          >
+            Cancel Payment
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -439,6 +509,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      {showMockModal && <MockPaymentModal />}
     </div>
   );
 };
