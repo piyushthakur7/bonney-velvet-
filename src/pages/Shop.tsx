@@ -68,7 +68,8 @@ const Shop = () => {
   const handleQuickAdd = (e: React.MouseEvent, product: any) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product);
+    const defaultVariant = product.variants && product.variants.length > 0 ? product.variants[0].value : undefined;
+    addToCart(product, defaultVariant);
     setAddedId(product.id);
     setTimeout(() => setAddedId(null), 2000);
   };
@@ -265,7 +266,7 @@ const Shop = () => {
                       </button>
                     </Link>
                     
-                    <div className="space-y-3 px-2">
+                    <div className="space-y-4 px-2">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
                           <p className="text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</p>
@@ -275,12 +276,34 @@ const Shop = () => {
                         </div>
                         <p className="text-xl font-display font-black text-brand">₹{product.price}</p>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        {product.concern.slice(0, 2).map(c => (
-                          <span key={c} className="text-[8px] font-black uppercase tracking-widest text-zinc-400 border border-zinc-100 px-2 py-1 rounded">
-                            {c}
-                          </span>
-                        ))}
+                      
+                      <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto gap-4">
+                        <div className="flex flex-wrap gap-2">
+                          {product.concern.slice(0, 1).map(c => (
+                            <span key={c} className="text-[8px] font-black uppercase tracking-widest text-zinc-400 border border-zinc-100 px-2 py-1 rounded">
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                        
+                        <button 
+                          onClick={(e) => handleQuickAdd(e, product)}
+                          className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[10px] transition-all ${
+                            addedId === product.id ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:scale-[1.02]'
+                          }`}
+                        >
+                          {addedId === product.id ? (
+                            <>
+                              <Check size={14} />
+                              <span>Added</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShoppingBag size={14} />
+                              <span>Add to Bag</span>
+                            </>
+                          )}
+                        </button>
                       </div>
                     </div>
                   </motion.div>

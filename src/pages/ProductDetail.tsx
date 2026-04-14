@@ -22,6 +22,9 @@ const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState('description');
   const [isAdded, setIsAdded] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(
+    product?.variants && product.variants.length > 0 ? product.variants[0].value : undefined
+  );
 
   const product = products.find(p => p.id === id);
 
@@ -50,9 +53,7 @@ const ProductDetail = () => {
   const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+    addToCart(product, selectedVariant, quantity);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
@@ -170,6 +171,28 @@ const ProductDetail = () => {
               </div>
               <BrandTrustBar mode="grid" />
             </div>
+
+            {/* Variants */}
+            {product.variants && (
+              <div className="space-y-6 pt-12 border-t border-zinc-100">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand/40">Select Size</h3>
+                <div className="flex flex-wrap gap-4">
+                  {product.variants.map((v) => (
+                    <button
+                      key={v.value}
+                      onClick={() => setSelectedVariant(v.value)}
+                      className={`px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all ${
+                        selectedVariant === v.value 
+                          ? 'bg-brand border-brand text-white premium-shadow' 
+                          : 'bg-white border-zinc-100 text-zinc-400 hover:border-brand/30'
+                      }`}
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
 
             {/* Actions */}

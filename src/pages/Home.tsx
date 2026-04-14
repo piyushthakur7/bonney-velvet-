@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Star } from 'lucide-react';
 import { useData } from '../DataContext';
+import { useCart } from '../CartContext';
 import { Product } from '../types';
 import VideoShowcase from '../components/VideoShowcase';
+import { ShoppingBag, Star, Check } from 'lucide-react';
 
 const CATEGORY_IMAGES: Record<string, string> = {
   'Summer Picks': 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=200&h=200',
@@ -203,9 +204,19 @@ export default Home;
 // --- Sub-Components for the specifically designed Product Card ---
 
 const ProductCard = ({ product }: { product: Product }) => {
+  const { addToCart } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(
-    product.variants && product.variants.length > 0 ? product.variants[0].value : null
+    product.variants && product.variants.length > 0 ? product.variants[0].value : undefined
   );
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product, selectedVariant);
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
+  };
 
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow flex flex-col relative h-full">
@@ -261,12 +272,30 @@ const ProductCard = ({ product }: { product: Product }) => {
         )}
 
         {/* Footer (Rating & Action) */}
-        <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto">
+        <div className="flex items-center justify-between pt-6 border-t border-zinc-100 mt-auto gap-4">
            <div className="flex items-center space-x-1.5 text-[#f5a623] cursor-pointer hover:opacity-80">
              <span className="font-bold text-sm tracking-wide text-zinc-900">4.8</span>
              <Star size={14} fill="currentColor" />
-             <span className="text-zinc-500 text-xs font-semibold ml-1 underline underline-offset-2">See Reviews</span>
            </div>
+           
+           <button 
+             onClick={handleAddToCart}
+             className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[10px] transition-all ${
+               isAdded ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:scale-[1.02]'
+             }`}
+           >
+             {isAdded ? (
+               <>
+                 <Check size={14} />
+                 <span>Added</span>
+               </>
+             ) : (
+               <>
+                 <ShoppingBag size={14} />
+                 <span>Add to Bag</span>
+               </>
+             )}
+           </button>
         </div>
       </div>
     </div>

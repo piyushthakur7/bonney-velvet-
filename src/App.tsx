@@ -25,6 +25,7 @@ import Account from './pages/Account';
 import ProtectedRoute from './components/ProtectedRoute';
 import { PrivacyPolicy, Terms, RefundPolicy, ShippingPolicy } from './pages/Policies';
 import BottomFloatingBanner from './components/BottomFloatingBanner';
+import Toast from './components/Toast';
 
 export default function App() {
   return (
@@ -62,6 +63,7 @@ export default function App() {
               </main>
               <Footer />
               <BottomFloatingBanner />
+              <Toast />
             </div>
           </Router>
         </CartProvider>

@@ -44,7 +44,15 @@ const Cart = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-xl sm:text-lg font-bold text-zinc-900">{item.name}</h3>
-                    <p className="text-xs text-zinc-400 uppercase tracking-widest mt-1">{item.category}</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <p className="text-[10px] text-zinc-400 uppercase tracking-widest">{item.category}</p>
+                      {item.selectedVariant && (
+                        <>
+                          <span className="w-1 h-1 bg-zinc-200 rounded-full" />
+                          <p className="text-[10px] text-brand font-black uppercase tracking-widest">{item.selectedVariant}</p>
+                        </>
+                      )}
+                    </div>
                   </div>
                   <p className="font-display font-black text-brand text-lg">₹{item.price * item.quantity}</p>
                 </div>
@@ -52,21 +60,21 @@ const Cart = () => {
                 <div className="flex justify-between items-center mt-6">
                   <div className="flex items-center bg-zinc-50 rounded-full px-4 py-2 border border-zinc-100">
                     <button 
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedVariant)}
                       className="p-1 text-zinc-400 hover:text-brand transition-colors"
                     >
                       <Minus size={16} />
                     </button>
                     <span className="w-10 text-center text-sm font-black text-brand">{item.quantity}</span>
                     <button 
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedVariant)}
                       className="p-1 text-zinc-400 hover:text-brand transition-colors"
                     >
                       <Plus size={16} />
                     </button>
                   </div>
                   <button 
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item.id, item.selectedVariant)}
                     className="p-3 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-sm"
                   >
                     <Trash2 size={18} />

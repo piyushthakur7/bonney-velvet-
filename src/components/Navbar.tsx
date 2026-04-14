@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Menu, X, Search, User as UserIcon } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ShoppingBag, Menu, X, Search, User as UserIcon, ArrowRight } from 'lucide-react';
 import { useCart } from '../CartContext';
 import { useAuth } from '../AuthContext';
 import { motion, AnimatePresence } from 'motion/react';
@@ -13,10 +13,13 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
   const [showTopBanner, setShowTopBanner] = React.useState(true);
   const [scrolled, setScrolled] = React.useState(false);
   const { totalItems } = useCart();
   const location = useLocation();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -31,6 +34,15 @@ const Navbar = () => {
     { name: 'Our Story', path: '/about' },
     { name: 'Support', path: '/support' },
   ];
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
@@ -89,7 +101,10 @@ const Navbar = () => {
 
           {/* Right: Icons */}
           <div className="flex items-center justify-end space-x-2 sm:space-x-4 flex-1">
-            <button className="p-2 text-zinc-900 hover:text-brand transition-colors">
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2 text-zinc-900 hover:text-brand transition-colors"
+            >
               <Search size={22} strokeWidth={2.5} />
             </button>
             
@@ -169,6 +184,67 @@ const Navbar = () => {
                     <span>Login / Signup</span>
                   </Link>
                 )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Search Overlay */}
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-[60] bg-white/95 backdrop-blur-2xl flex flex-col pt-32 px-4"
+          >
+            <button 
+              onClick={() => setIsSearchOpen(false)}
+              className="absolute top-8 right-8 p-3 bg-zinc-100 rounded-full text-zinc-600 hover:text-brand transition-all hover:scale-110"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="max-w-4xl mx-auto w-full space-y-12">
+              <div className="space-y-4">
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-400">Search Products</span>
+                <form onSubmit={handleSearch} className="relative group">
+                  <input
+                    autoFocus
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search formulations..."
+                    className="w-full bg-transparent border-b-2 border-zinc-100 py-6 text-2xl md:text-5xl font-display font-medium text-brand placeholder:text-zinc-200 focus:outline-none focus:border-brand/30 transition-all uppercase tracking-tight"
+                  />
+                  <button 
+                    type="submit"
+                    disabled={!searchQuery.trim()}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-brand bg-brand-light rounded-2xl hover:bg-brand hover:text-white transition-all disabled:opacity-0 disabled:translate-x-4"
+                  >
+                    <ArrowRight size={32} />
+                  </button>
+                </form>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Quick Links</h4>
+                  <div className="flex flex-col space-y-3">
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Cleansers" className="text-sm font-bold text-zinc-600 hover:text-brand">Cleansers</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Serums" className="text-sm font-bold text-zinc-600 hover:text-brand">Serums</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Moisturizers" className="text-sm font-bold text-zinc-600 hover:text-brand">Moisturizers</Link>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">By Concern</h4>
+                  <div className="flex flex-col space-y-3">
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?concern=Acne" className="text-sm font-bold text-zinc-600 hover:text-brand">Acne & Blemishes</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?concern=Dryness" className="text-sm font-bold text-zinc-600 hover:text-brand">Dryness</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?concern=Glow" className="text-sm font-bold text-zinc-600 hover:text-brand">Glow & Radiance</Link>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
