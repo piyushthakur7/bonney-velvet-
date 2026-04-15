@@ -77,8 +77,8 @@ const Navbar = () => {
 
           {/* Center: Logo */}
           <div className="flex justify-center flex-1">
-            <Link to="/" className="text-2xl md:text-3xl font-display font-black text-brand tracking-tighter">
-              BONNY<span className="italic font-serif font-light">Velvet</span>
+            <Link to="/" className="text-2xl md:text-3xl font-logo font-black text-brand tracking-tighter uppercase">
+              BONNY VELVET
             </Link>
           </div>
 

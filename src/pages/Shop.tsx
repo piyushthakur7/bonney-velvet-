@@ -223,7 +223,7 @@ const Shop = () => {
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="group space-y-6"
+                    className="group flex flex-col h-full space-y-5"
                   >
                     <Link to={`/product/${product.id}`} className="block relative aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-zinc-50 premium-shadow">
                       <img 
@@ -266,15 +266,15 @@ const Shop = () => {
                       </button>
                     </Link>
                     
-                    <div className="space-y-4 px-2">
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
+                    <div className="flex flex-col flex-1 space-y-4 px-2">
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="space-y-1 flex-1">
                           <p className="text-[8px] sm:text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</p>
                           <Link to={`/product/${product.id}`} className="block">
-                            <h3 className="text-sm sm:text-2xl font-display font-bold text-brand group-hover:text-brand/70 transition-colors">{product.name}</h3>
+                            <h3 className="text-sm sm:text-xl font-display font-bold text-brand group-hover:text-brand/70 transition-colors line-clamp-2 min-h-[3rem]">{product.name}</h3>
                           </Link>
                         </div>
-                        <p className="text-sm sm:text-xl font-display font-black text-brand">₹{product.price}</p>
+                        <p className="text-sm sm:text-lg font-display font-black text-brand shrink-0">₹{product.price}</p>
                       </div>
                       
                       <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto gap-4">

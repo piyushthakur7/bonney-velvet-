@@ -316,7 +316,7 @@ const ProductDetail = () => {
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {products.filter(p => p.id !== id).slice(0, 4).map((p) => (
-            <Link key={p.id} to={`/product/${p.id}`} className="group space-y-6">
+            <Link key={p.id} to={`/product/${p.id}`} className="group flex flex-col h-full space-y-4">
               <div className="aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-50 premium-shadow">
                 <img 
                   src={p.image} 
@@ -325,9 +325,9 @@ const ProductDetail = () => {
                   referrerPolicy="no-referrer" 
                 />
               </div>
-              <div className="space-y-2 px-2">
-                <h4 className="font-display font-bold text-sm sm:text-xl text-brand group-hover:text-brand transition-colors">{p.name}</h4>
-                <p className="text-sm sm:text-base text-zinc-400 font-display font-black">₹{p.price}</p>
+              <div className="flex flex-col flex-1 space-y-2 px-1">
+                <h4 className="font-display font-bold text-sm sm:text-lg text-brand group-hover:text-brand transition-colors line-clamp-2 min-h-[2.5rem] sm:min-h-[3rem] leading-tight">{p.name}</h4>
+                <p className="text-xs sm:text-base text-zinc-400 font-display font-black mt-auto">₹{p.price}</p>
               </div>
             </Link>
           ))}

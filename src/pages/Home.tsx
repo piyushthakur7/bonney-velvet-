@@ -223,12 +223,14 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
       {/* Bottom Content Section */}
       <div className="p-3 sm:p-5 flex flex-col flex-1 bg-white">
-        <h3 className="font-bold text-zinc-900 text-sm sm:text-xl leading-snug mb-1 sm:mb-2 line-clamp-3 sm:line-clamp-2 min-h-[3rem] sm:min-h-0">
-          {product.name}
-        </h3>
-        <p className="hidden sm:block text-zinc-500 text-sm mb-5 font-medium line-clamp-2">
-          {product.shortDescription || (product.description && product.description.replace(/<[^>]*>?/gm, ''))}
-        </p>
+        <div className="flex flex-col flex-1">
+          <h3 className="font-bold text-zinc-900 text-sm sm:text-lg leading-snug mb-1 sm:mb-2 line-clamp-3 min-h-[3.25rem] sm:min-h-[3.5rem]">
+            {product.name}
+          </h3>
+          <p className="hidden sm:line-clamp-2 text-zinc-500 text-xs mb-4 font-medium min-h-[2.5rem]">
+            {product.shortDescription || (product.description && product.description.replace(/<[^>]*>?/gm, ''))}
+          </p>
+        </div>
 
         {/* Variants Selector */}
         {product.variants && (
