@@ -51,25 +51,10 @@ const Home = () => {
 
         </div>
         
-        {/* Decorative product images floating in banner (Mocking the vibe) */}
-        <motion.img 
-          initial={{ y: 20, opacity: 0 }} 
-          animate={{ y: 0, opacity: 1 }}
-          src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=300&h=300"
-          className="absolute -bottom-10 -left-10 w-48 h-48 object-cover mix-blend-multiply opacity-80 rotate-12 rounded-full"
-          alt=""
-        />
-        <motion.img 
-          initial={{ y: -20, opacity: 0 }} 
-          animate={{ y: 0, opacity: 1 }}
-          src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=300&h=300"
-          className="absolute -top-10 -right-10 w-56 h-56 object-cover mix-blend-multiply opacity-80 -rotate-12 rounded-full"
-          alt=""
-        />
       </section>
 
       {/* Category Bubbles Container */}
-      <section className="bg-white border-b border-zinc-100 sticky top-[110px] z-40 shadow-sm">
+      <section className="bg-white border-b border-zinc-100">
         <div className="max-w-7xl mx-auto">
           <div className="flex overflow-x-auto hide-scrollbar px-4 py-6 gap-6 sm:gap-10 sm:justify-center">
             {BUBBLE_CATEGORIES.map((cat) => {

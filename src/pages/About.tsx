@@ -101,7 +101,7 @@ const About = () => {
             <p className="text-zinc-400 font-light uppercase tracking-[0.2em] text-xs">The pillars of our brand identity</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 gap-4 sm:gap-8">
             {[
               { icon: Sparkles, title: "Purity", desc: "Clean ingredients, zero compromises on safety." },
               { icon: Heart, title: "Empathy", desc: "Skincare that understands your unique needs." },
@@ -111,7 +111,7 @@ const About = () => {
               <motion.div 
                 key={i}
                 whileHover={{ y: -10 }}
-                className="bg-white p-12 rounded-[3rem] space-y-6 premium-shadow border border-zinc-100 text-center"
+                className="bg-white p-6 sm:p-12 rounded-[2rem] sm:rounded-[3rem] space-y-4 sm:space-y-6 premium-shadow border border-zinc-100 text-center"
               >
                 <div className="w-16 h-16 bg-brand-light rounded-2xl flex items-center justify-center text-brand mx-auto">
                   <value.icon size={28} />

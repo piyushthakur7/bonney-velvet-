@@ -275,7 +275,7 @@ const VideoShowcase: React.FC = () => {
       </div>
 
       {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
         {VIDEOS.map((video, i) => (
           <VideoCard key={video.id} video={video} index={i} />
         ))}
