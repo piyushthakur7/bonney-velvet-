@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useData } from '../DataContext';
 import { useCart } from '../CartContext';
@@ -198,7 +199,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow flex flex-col relative h-full">
       {/* Top Image Section */}
-      <div className="bg-zinc-50 w-full aspect-[4/5] relative overflow-hidden group">
+      <Link to={`/product/${product.id}`} className="bg-zinc-50 w-full aspect-[4/5] relative overflow-hidden group block">
         {/* Badges positioned absolute */}
         {product.badge && (
           <div className="absolute top-3 left-0 pl-3 z-10">
@@ -219,14 +220,16 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-      </div>
+      </Link>
 
       {/* Bottom Content Section */}
       <div className="p-3 sm:p-5 flex flex-col flex-1 bg-white">
         <div className="flex flex-col flex-1">
-          <h3 className="font-bold text-zinc-900 text-sm sm:text-lg leading-snug mb-1 sm:mb-2 line-clamp-3 min-h-[3.25rem] sm:min-h-[3.5rem]">
-            {product.name}
-          </h3>
+          <Link to={`/product/${product.id}`}>
+            <h3 className="font-bold text-zinc-900 text-sm sm:text-lg leading-snug mb-1 sm:mb-2 line-clamp-3 min-h-[3.25rem] sm:min-h-[3.5rem] hover:text-brand transition-colors">
+              {product.name}
+            </h3>
+          </Link>
           <p className="hidden sm:line-clamp-2 text-zinc-500 text-xs mb-4 font-medium min-h-[2.5rem]">
             {product.shortDescription || (product.description && product.description.replace(/<[^>]*>?/gm, ''))}
           </p>
@@ -238,7 +241,11 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             {product.variants.map((v) => (
               <button
                 key={v.value}
-                onClick={() => setSelectedVariant(v.value)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedVariant(v.value);
+                }}
                 className={`px-2 py-1 sm:px-4 sm:py-1.5 rounded-sm text-[10px] sm:text-sm font-bold border transition-colors ${
                   selectedVariant === v.value 
                     ? 'bg-[#f6a182] border-[#f6a182] text-white' 

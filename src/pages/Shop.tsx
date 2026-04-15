@@ -11,7 +11,7 @@ import { useCart } from '../CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 
 const Shop = () => {
-  const { products, categories, loading, error } = useData();
+  const { products, categories, loading, error, usingFallback } = useData();
   const { addToCart } = useCart();
   const [addedId, setAddedId] = useState<string | null>(null);
   const CONCERNS = ['Acne', 'Dryness', 'Glow', 'Repair', 'Anti-Aging'];
