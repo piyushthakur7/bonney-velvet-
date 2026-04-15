@@ -199,7 +199,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow flex flex-col relative h-full">
       {/* Top Image Section */}
-      <Link to={`/product/${product.id}`} className="bg-zinc-50 w-full aspect-[4/5] relative overflow-hidden group block">
+      <Link to={`/product/${product.id}`} className="bg-zinc-50 w-full aspect-square relative overflow-hidden group block">
         {/* Badges positioned absolute */}
         {product.badge && (
           <div className="absolute top-3 left-0 pl-3 z-10">
@@ -212,11 +212,11 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         )}
         <motion.img 
           initial={{ scale: 1 }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.7 }}
           src={product.image} 
           alt={product.name}
-          className="absolute inset-0 w-full h-full object-cover" 
+          className="absolute inset-0 w-full h-full object-contain p-6" 
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>

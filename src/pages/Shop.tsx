@@ -229,11 +229,11 @@ const Shop = () => {
                     animate={{ opacity: 1 }}
                     className="group flex flex-col h-full space-y-5"
                   >
-                    <Link to={`/product/${product.id}`} className="block relative aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-zinc-50 premium-shadow">
+                    <Link to={`/product/${product.id}`} className="block relative aspect-square rounded-[2.5rem] overflow-hidden bg-zinc-50 premium-shadow">
                       <img 
                         src={product.image} 
                         alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-700"
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>

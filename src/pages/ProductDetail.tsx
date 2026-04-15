@@ -93,7 +93,7 @@ const ProductDetail = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="aspect-[4/5] rounded-[2rem] sm:rounded-[3rem] overflow-hidden bg-zinc-50 premium-shadow"
+              className="aspect-square rounded-[2rem] sm:rounded-[3rem] overflow-hidden bg-zinc-50 premium-shadow"
             >
               <AnimatePresence mode="wait">
                 <motion.img
@@ -104,7 +104,7 @@ const ProductDetail = () => {
                   transition={{ duration: 0.3 }}
                   src={galleryImages[selectedImage]} 
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain p-12"
                   referrerPolicy="no-referrer"
                 />
               </AnimatePresence>
