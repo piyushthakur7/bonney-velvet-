@@ -2,8 +2,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #400c2c;
-  --color-brand-light: #fdf8f5;
+  --color-brand: #7c3aed;
+  --color-brand-light: #f5f3ff;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", serif;
   --font-display: "Outfit", sans-serif;
@@ -20,7 +20,7 @@
 }
 
 .premium-shadow {
-  box-shadow: 0 20px 40px -15px rgba(64, 12, 44, 0.08);
+  box-shadow: 0 20px 40px -15px rgba(124, 58, 237, 0.08);
 }
 
 .glass {
