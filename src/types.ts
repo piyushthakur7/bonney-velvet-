@@ -21,6 +21,11 @@ export interface Product {
   stock: number;
   badge?: string;
   variants?: { label: string; value: string }[];
+  highlights?: string[];
+  specs?: {
+    info?: { label: string; value: string }[];
+    features?: { label: string; value: string }[];
+  };
 }
 
 export interface CartItem extends Product {

@@ -1,4 +1,5 @@
 import { Product, CartItem } from '../types';
+import { PRODUCT_ENRICHMENT } from '../data/productEnrichment';
 
 // Configuration for WooCommerce integration
 // In dev mode, use the Vite proxy to bypass CORS. In production, use the direct URL.
@@ -42,6 +43,7 @@ export const fetchWooCommerceCategories = async (): Promise<string[]> => {
 
 /**
  * Fetches products from WooCommerce REST API.
+ * Merges static enrichment data (highlights, specs) by product ID.
  * 
  * @returns Array of products mapped to our frontend Product type.
  */
@@ -66,26 +68,34 @@ export const fetchWooCommerceProducts = async (): Promise<Product[]> => {
     const wcProducts = await response.json();
 
     // Map WooCommerce products to our internal Product type
-    return wcProducts.map((p: any) => ({
-      id: p.id.toString(),
-      name: p.name,
-      price: parseFloat(p.price || '0'),
-      originalPrice: p.regular_price ? parseFloat(p.regular_price) : undefined,
-      category: p.categories?.length > 0 ? p.categories[0].name : 'Uncategorized',
-      // Map attributes like 'concern', 'benefits', 'ingredients' if they exist
-      concern: p.attributes?.find((a: any) => a.name.toLowerCase() === 'concern')?.options || [],
-      image: p.images?.length > 0 ? p.images[0].src : 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800',
-      images: p.images?.length > 0 ? p.images.map((img: any) => img.src) : ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800'],
-      description: p.description || p.short_description || '',
-      shortDescription: p.short_description?.replace(/<[^>]*>?/gm, '') || p.description?.replace(/<[^>]*>?/gm, ''),
-      benefits: p.attributes?.find((a: any) => a.name.toLowerCase() === 'benefits')?.options || [],
-      ingredients: p.attributes?.find((a: any) => a.name.toLowerCase() === 'ingredients')?.options || [],
-      howToUse: p.attributes?.find((a: any) => a.name.toLowerCase() === 'how to use')?.options?.[0] || 'Apply as directed.',
-      results: p.attributes?.find((a: any) => a.name.toLowerCase() === 'results')?.options?.[0] || 'Visible glow.',
-      stock: p.stock_quantity || 100,
-      variants: p.attributes?.find((a: any) => a.variation === true || a.name.toLowerCase() === 'size' || a.name.toLowerCase() === 'volume')
-        ?.options?.map((opt: string) => ({ name: opt, value: opt })) || []
-    }));
+    return wcProducts.map((p: any) => {
+      const id = p.id.toString();
+      const enrichment = PRODUCT_ENRICHMENT[id];
+
+      return {
+        id,
+        name: p.name,
+        price: parseFloat(p.price || '0'),
+        originalPrice: p.regular_price ? parseFloat(p.regular_price) : undefined,
+        category: p.categories?.length > 0 ? p.categories[0].name : 'Uncategorized',
+        // Map attributes like 'concern', 'benefits', 'ingredients' if they exist
+        concern: p.attributes?.find((a: any) => a.name.toLowerCase() === 'concern')?.options || [],
+        image: p.images?.length > 0 ? p.images[0].src : 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800',
+        images: p.images?.length > 0 ? p.images.map((img: any) => img.src) : ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800'],
+        description: p.description || p.short_description || '',
+        shortDescription: p.short_description?.replace(/<[^>]*>?/gm, '') || p.description?.replace(/<[^>]*>?/gm, ''),
+        benefits: p.attributes?.find((a: any) => a.name.toLowerCase() === 'benefits')?.options || [],
+        ingredients: p.attributes?.find((a: any) => a.name.toLowerCase() === 'ingredients')?.options || [],
+        howToUse: p.attributes?.find((a: any) => a.name.toLowerCase() === 'how to use')?.options?.[0] || 'Apply as directed.',
+        results: p.attributes?.find((a: any) => a.name.toLowerCase() === 'results')?.options?.[0] || 'Visible glow.',
+        stock: p.stock_quantity || 100,
+        variants: p.attributes?.find((a: any) => a.variation === true || a.name.toLowerCase() === 'size' || a.name.toLowerCase() === 'volume')
+          ?.options?.map((opt: string) => ({ name: opt, value: opt })) || [],
+        // Merge static enrichment data
+        highlights: enrichment?.highlights,
+        specs: enrichment?.specs,
+      };
+    });
   } catch (error) {
     console.error('Error fetching products from WooCommerce:', error);
     return [];

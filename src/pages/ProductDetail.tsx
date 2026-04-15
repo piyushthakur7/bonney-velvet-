@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Star, ShieldCheck, Zap, ArrowLeft, ChevronRight, Minus, Plus, ArrowRight, Sparkles } from 'lucide-react';
+import { ShoppingBag, Star, ShieldCheck, Zap, ArrowLeft, ChevronRight, Minus, Plus, ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
 
 import { useData } from '../DataContext';
 import { useCart } from '../CartContext';
@@ -158,6 +158,21 @@ const ProductDetail = () => {
               <p className="text-zinc-500 font-light text-base sm:text-lg leading-relaxed">
                 {product.shortDescription || (product.description && product.description.replace(/<[^>]*>?/gm, ''))}
               </p>
+
+              {/* Highlights Section */}
+              {product.highlights && product.highlights.length > 0 && (
+                <div className="space-y-4 pt-8">
+                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand/40">About this item</h3>
+                   <ul className="space-y-3">
+                     {product.highlights.map((point, idx) => (
+                       <li key={idx} className="flex items-start text-sm text-zinc-600 font-light leading-snug">
+                         <div className="w-1.5 h-1.5 rounded-full bg-brand/20 mt-1.5 mr-3 shrink-0" />
+                         <span>{point}</span>
+                       </li>
+                     ))}
+                   </ul>
+                </div>
+              )}
             </div>
 
             {/* Our Purity Standard */}
@@ -301,6 +316,18 @@ const ProductDetail = () => {
                 </AnimatePresence>
               </div>
             </div>
+
+            {/* Technical Specifications Accordions */}
+            {product.specs && (
+              <div className="space-y-4 pt-12 border-t border-zinc-100">
+                {product.specs.info && product.specs.info.length > 0 && (
+                  <SpecAccordion title="Info" items={product.specs.info} />
+                )}
+                {product.specs.features && product.specs.features.length > 0 && (
+                  <SpecAccordion title="Features & Specs" items={product.specs.features} />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -333,6 +360,54 @@ const ProductDetail = () => {
           ))}
         </div>
       </section>
+    </div>
+  );
+};
+
+const SpecAccordion = ({ title, items }: { title: string; items: { label: string; value: string }[] }) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="border border-zinc-100 rounded-2xl overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-6 bg-zinc-50/50 hover:bg-zinc-50 transition-colors"
+      >
+        <span className="text-sm font-bold text-brand">{title}</span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <ChevronDown size={18} className="text-zinc-400" />
+        </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <div className="p-0 border-t border-zinc-100">
+              <table className="w-full text-left border-collapse">
+                <tbody>
+                  {items.map((item, idx) => (
+                    <tr key={idx} className="border-b border-zinc-50 last:border-0 hover:bg-zinc-50/30 transition-colors">
+                      <td className="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 w-2/5 align-top border-r border-zinc-50">
+                        {item.label}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-zinc-600 font-light leading-relaxed">
+                        {item.value}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
