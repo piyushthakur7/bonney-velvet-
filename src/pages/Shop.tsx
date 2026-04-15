@@ -11,15 +11,17 @@ import { useCart } from '../CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 
 const Shop = () => {
-  const { products, categories, loading } = useData();
+  const { products, categories, loading, error } = useData();
   const { addToCart } = useCart();
   const [addedId, setAddedId] = useState<string | null>(null);
+  const CONCERNS = ['Acne', 'Dryness', 'Glow', 'Repair', 'Anti-Aging'];
 
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const categoryFilter = searchParams.get('category');
+  const concernFilter = searchParams.get('concern');
 
   const searchQuery = searchParams.get('q') || '';
   const sortBy = searchParams.get('sort') || 'featured';
@@ -29,6 +31,10 @@ const Shop = () => {
 
     if (categoryFilter) {
       result = result.filter(p => p.category === categoryFilter);
+    }
+
+    if (concernFilter) {
+      result = result.filter(p => p.concern?.includes(concernFilter as any));
     }
 
 
@@ -51,9 +57,9 @@ const Shop = () => {
     }
 
     return result;
-  }, [categoryFilter, searchQuery, sortBy, products]);
+  }, [categoryFilter, concernFilter, searchQuery, sortBy, products]);
 
-  const toggleFilter = (type: 'category', value: string) => {
+  const toggleFilter = (type: 'category' | 'concern', value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (newParams.get(type) === value) {
       newParams.delete(type);
@@ -142,7 +148,24 @@ const Shop = () => {
                     </div>
                   </div>
                   
-
+                  <div className="flex items-center space-x-4">
+                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] shrink-0">By Concern:</span>
+                    <div className="flex overflow-x-auto pb-2 scrollbar-hide gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+                      {CONCERNS.map(con => (
+                        <button
+                          key={con}
+                          onClick={() => toggleFilter('concern', con)}
+                          className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                            concernFilter === con 
+                            ? 'bg-brand text-white' 
+                            : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
+                          }`}
+                        >
+                          {con}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 border-t border-zinc-50 sm:border-t-0 sm:pt-0">
@@ -261,6 +284,13 @@ const Shop = () => {
 
                         
                       <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto gap-4">
+                        <div className="flex flex-wrap gap-2">
+                          {product.concern?.slice(0, 1).map(c => (
+                            <span key={c} className="text-[8px] font-black uppercase tracking-widest text-zinc-400 border border-zinc-100 px-2 py-1 rounded">
+                              {c}
+                            </span>
+                          ))}
+                        </div>
                         <button 
                           onClick={(e) => handleQuickAdd(e, product)}
                           className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[10px] transition-all ${
@@ -288,7 +318,7 @@ const Shop = () => {
               {filteredProducts.length === 0 && (
                 <div className="text-center py-32 space-y-6">
                   <p className="text-zinc-400 font-light italic font-serif text-2xl">
-                    {products.length === 0 ? "No products found in the store." : "No formulations match your selection."}
+                    {error ? error : (products.length === 0 ? "No products found in the store." : "No formulations match your selection.")}
                   </p>
                   {products.length > 0 && (
                     <button 

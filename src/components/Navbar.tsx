@@ -220,6 +220,14 @@ const Navbar = () => {
                     <Link onClick={() => setIsSearchOpen(false)} to="/shop?category=Moisturizers" className="text-sm font-bold text-zinc-600 hover:text-brand">Moisturizers</Link>
                   </div>
                 </div>
+                <div className="space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">By Concern</h4>
+                  <div className="flex flex-col space-y-3">
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?concern=Acne" className="text-sm font-bold text-zinc-600 hover:text-brand">Acne & Blemishes</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?concern=Dryness" className="text-sm font-bold text-zinc-600 hover:text-brand">Dryness</Link>
+                    <Link onClick={() => setIsSearchOpen(false)} to="/shop?concern=Glow" className="text-sm font-bold text-zinc-600 hover:text-brand">Glow & Radiance</Link>
+                  </div>
+                </div>
 
               </div>
             </div>
