@@ -68,10 +68,39 @@ const Home = () => {
         />
       </section>
 
+      {/* Category Bubbles Container */}
+      <section className="bg-white border-b border-zinc-100 sticky top-[110px] z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex overflow-x-auto hide-scrollbar px-4 py-6 gap-6 sm:gap-10 sm:justify-center">
+            {BUBBLE_CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat;
+              return (
+                <button 
+                  key={cat} 
+                  onClick={() => setActiveCategory(cat)}
+                  className="flex flex-col items-center gap-3 shrink-0 group focus:outline-none"
+                >
+                  <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden flex items-center justify-center transition-all ${isActive ? 'bg-[#fef08a] p-1 shadow-md scale-105' : 'bg-orange-50 p-1 group-hover:scale-105 group-hover:bg-[#fef08a]'}`}>
+                    <img 
+                      src={CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Summer Picks']} 
+                      alt={cat}
+                      className="w-full h-full object-cover rounded-full mix-blend-multiply"
+                    />
+                  </div>
+                  <span className={`text-sm sm:text-base font-bold transition-colors ${isActive ? 'text-black border-b-2 border-black pb-1' : 'text-zinc-600 border-b-2 border-transparent pb-1 group-hover:text-black'}`}>
+                    {cat}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Products Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <h2 className="text-2xl sm:text-3xl font-display font-medium text-zinc-900 mb-8 sm:mb-12">
-          Featured Products
+          {activeCategory}
         </h2>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8">
