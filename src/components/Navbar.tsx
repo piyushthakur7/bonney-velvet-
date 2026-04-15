@@ -47,7 +47,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
       <nav className={`transition-all duration-500 w-full ${
-        scrolled || isOpen ? 'bg-white/95 backdrop-blur-xl py-3 premium-shadow' : 'bg-white py-4'
+        scrolled || isOpen ? 'bg-white/95 backdrop-blur-xl py-1 premium-shadow' : 'bg-white py-2'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center relative">
@@ -78,7 +78,7 @@ const Navbar = () => {
           {/* Center: Logo */}
           <div className="flex justify-center flex-1">
             <Link to="/">
-              <img src="/logo.png" alt="Bonny Velvet" className="h-10 md:h-12 w-auto" />
+              <img src="/logo.png" alt="Bonny Velvet" className="h-24 md:h-28 w-auto" />
             </Link>
           </div>
 
