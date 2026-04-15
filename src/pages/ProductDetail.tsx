@@ -138,10 +138,6 @@ const ProductDetail = () => {
                 <span className="px-3 py-1 bg-brand/5 text-brand text-[10px] font-black uppercase tracking-widest rounded-full">
                   {product.category}
                 </span>
-                <div className="flex items-center text-amber-500">
-                  {[1,2,3,4,5].map(i => <Star key={i} size={12} fill="currentColor" />)}
-                  <span className="ml-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">128 Reviews</span>
-                </div>
               </div>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-brand leading-[0.9] tracking-tighter">

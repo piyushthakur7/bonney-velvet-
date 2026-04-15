@@ -39,13 +39,13 @@ const Home = () => {
   return (
     <div className="pb-32 bg-white mt-[84px]"> {/* Add margin to account for fixed navbar + top banner */}
       {/* Hero Banner Section */}
-      <section className="bg-[#a6cbeb] w-full px-4 py-8 relative overflow-hidden flex items-center justify-center min-h-[280px]">
+      <section className="bg-zinc-100 w-full px-4 py-8 relative overflow-hidden flex items-center justify-center min-h-[280px]">
         <div className="relative z-10 text-center flex flex-col items-center">
-          <h3 className="text-blue-900 font-black tracking-widest text-sm mb-1 uppercase drop-shadow-sm">Play On</h3>
-          <h1 className="text-4xl md:text-5xl font-black text-blue-950 uppercase tracking-tighter mb-2" style={{ textShadow: '2px 2px 4px rgba(255,255,255,0.5)' }}>
+          <h3 className="text-zinc-900 font-black tracking-widest text-sm mb-1 uppercase drop-shadow-sm">Play On</h3>
+          <h1 className="text-4xl md:text-5xl font-black text-zinc-950 uppercase tracking-tighter mb-2" style={{ textShadow: '2px 2px 4px rgba(255,255,255,0.5)' }}>
             Summer Sale
           </h1>
-          <p className="text-white font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md">
+          <p className="text-zinc-500 font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md">
             Biggest sale of the season
           </p>
 
@@ -151,9 +151,6 @@ const Home = () => {
               className="border border-brand/10 bg-brand-light p-8 lg:p-12 flex flex-col items-center text-center space-y-6"
             >
               <div className="space-y-2">
-                <div className="w-20 h-20 mx-auto rounded-full overflow-hidden mb-6 border border-brand/20 p-1 bg-white">
-                  <img src={review.image} alt={review.name} className="w-full h-full object-cover rounded-full" />
-                </div>
                 <h4 className="font-bold text-brand uppercase tracking-widest text-sm">{review.name}</h4>
                 <p className="text-sm text-zinc-500 font-serif italic">{review.location}</p>
               </div>
@@ -216,7 +213,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow flex flex-col relative h-full">
       {/* Top Image Section */}
-      <div className="bg-[#a5c8eb] w-full pt-12 pb-6 px-4 flex items-center justify-center relative min-h-[220px]">
+      <div className="bg-zinc-50 w-full pt-12 pb-6 px-4 flex items-center justify-center relative min-h-[220px]">
         {/* Badges positioned absolute */}
         {product.badge && (
           <div className="absolute top-4 left-0 pl-4">
@@ -266,13 +263,8 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
 
-        {/* Footer (Rating & Action) */}
-        <div className="flex items-center justify-between pt-6 border-t border-zinc-100 mt-auto gap-4">
-           <div className="flex items-center space-x-1.5 text-[#f5a623] cursor-pointer hover:opacity-80">
-             <span className="font-bold text-sm tracking-wide text-zinc-900">4.8</span>
-             <Star size={14} fill="currentColor" />
-           </div>
-           
+        {/* Footer (Action) */}
+        <div className="flex items-center justify-end pt-6 border-t border-zinc-100 mt-auto gap-4 w-full">
            <button 
              onClick={handleAddToCart}
              className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[10px] transition-all ${
