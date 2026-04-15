@@ -68,42 +68,13 @@ const Home = () => {
         />
       </section>
 
-      {/* Category Bubbles Container */}
-      <section className="bg-white border-b border-zinc-100 sticky top-[110px] z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex overflow-x-auto hide-scrollbar px-4 py-6 gap-6 sm:gap-10 sm:justify-center">
-            {BUBBLE_CATEGORIES.map((cat) => {
-              const isActive = activeCategory === cat;
-              return (
-                <button 
-                  key={cat} 
-                  onClick={() => setActiveCategory(cat)}
-                  className="flex flex-col items-center gap-3 shrink-0 group focus:outline-none"
-                >
-                  <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden flex items-center justify-center transition-all ${isActive ? 'bg-[#fef08a] p-1 shadow-md scale-105' : 'bg-orange-50 p-1 group-hover:scale-105 group-hover:bg-[#fef08a]'}`}>
-                    <img 
-                      src={CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Summer Picks']} 
-                      alt={cat}
-                      className="w-full h-full object-cover rounded-full mix-blend-multiply"
-                    />
-                  </div>
-                  <span className={`text-sm sm:text-base font-bold transition-colors ${isActive ? 'text-black border-b-2 border-black pb-1' : 'text-zinc-600 border-b-2 border-transparent pb-1 group-hover:text-black'}`}>
-                    {cat}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Products Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <h2 className="text-2xl sm:text-3xl font-display font-medium text-zinc-900 mb-8 sm:mb-12">
-          {activeCategory}
+          Featured Products
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -213,11 +184,11 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow flex flex-col relative h-full">
       {/* Top Image Section */}
-      <div className="bg-zinc-50 w-full pt-12 pb-6 px-4 flex items-center justify-center relative min-h-[220px]">
+      <div className="bg-zinc-50 w-full aspect-[4/5] relative overflow-hidden group">
         {/* Badges positioned absolute */}
         {product.badge && (
-          <div className="absolute top-4 left-0 pl-4">
-             <span className={`text-[10px] sm:text-xs font-black uppercase inline-block px-3 py-1 bg-white rounded-sm ${
+          <div className="absolute top-3 left-0 pl-3 z-10">
+             <span className={`text-[8px] sm:text-[10px] font-black uppercase inline-block px-2 py-1 bg-white rounded-sm ${
                product.badge.includes('CELEBRITY') ? 'text-[#a17a3f]' : 'text-[#8b5a8b]'
              } premium-shadow`}>
                 {product.badge}
@@ -225,33 +196,34 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
         <motion.img 
-          initial={{ scale: 0.95 }}
+          initial={{ scale: 1 }}
           whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.7 }}
           src={product.image} 
           alt={product.name}
-          className="w-3/4 max-w-[200px] h-auto object-contain filter drop-shadow-2xl mix-blend-multiply" 
+          className="absolute inset-0 w-full h-full object-cover" 
           referrerPolicy="no-referrer"
         />
+        <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
       </div>
 
       {/* Bottom Content Section */}
-      <div className="p-5 sm:p-6 flex flex-col flex-1 bg-white">
-        <h3 className="font-bold text-zinc-900 text-lg sm:text-xl leading-snug mb-2 line-clamp-2">
+      <div className="p-3 sm:p-5 flex flex-col flex-1 bg-white">
+        <h3 className="font-bold text-zinc-900 text-sm sm:text-xl leading-snug mb-1 sm:mb-2 line-clamp-3 sm:line-clamp-2 min-h-[3rem] sm:min-h-0">
           {product.name}
         </h3>
-        <p className="text-zinc-500 text-sm mb-5 font-medium line-clamp-2">
-          {product.description}
+        <p className="hidden sm:block text-zinc-500 text-sm mb-5 font-medium line-clamp-2">
+          {product.shortDescription || (product.description && product.description.replace(/<[^>]*>?/gm, ''))}
         </p>
 
         {/* Variants Selector */}
         {product.variants && (
-          <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+          <div className="flex flex-wrap gap-1.5 mb-4 mt-auto">
             {product.variants.map((v) => (
               <button
                 key={v.value}
                 onClick={() => setSelectedVariant(v.value)}
-                className={`px-4 py-1.5 rounded-sm text-sm font-bold border transition-colors ${
+                className={`px-2 py-1 sm:px-4 sm:py-1.5 rounded-sm text-[10px] sm:text-sm font-bold border transition-colors ${
                   selectedVariant === v.value 
                     ? 'bg-[#f6a182] border-[#f6a182] text-white' 
                     : 'bg-white border-zinc-200 text-zinc-700 hover:border-[#f6a182]'
@@ -264,22 +236,22 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         )}
 
         {/* Footer (Action) */}
-        <div className="flex items-center justify-end pt-6 border-t border-zinc-100 mt-auto gap-4 w-full">
+        <div className="flex items-center justify-end pt-4 sm:pt-6 border-t border-zinc-100 mt-auto gap-4 w-full">
            <button 
              onClick={handleAddToCart}
-             className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[10px] transition-all ${
+             className={`flex-1 h-10 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center space-x-1.5 font-black uppercase tracking-widest text-[8px] sm:text-[10px] transition-all ${
                isAdded ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:scale-[1.02]'
              }`}
            >
              {isAdded ? (
                <>
-                 <Check size={14} />
+                 <Check size={12} className="sm:w-3.5 sm:h-3.5" />
                  <span>Added</span>
                </>
              ) : (
                <>
-                 <ShoppingBag size={14} />
-                 <span>Add to Bag</span>
+                 <ShoppingBag size={12} className="sm:w-3.5 sm:h-3.5" />
+                 <span>Add</span>
                </>
              )}
            </button>

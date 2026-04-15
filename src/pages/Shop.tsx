@@ -216,7 +216,7 @@ const Shop = () => {
               </div>
 
               {/* Product Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-8 sm:gap-x-8 sm:gap-y-16">
                 {filteredProducts.map((product) => (
                   <motion.div 
                     key={product.id}
@@ -269,12 +269,12 @@ const Shop = () => {
                     <div className="space-y-4 px-2">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
-                          <p className="text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</p>
+                          <p className="text-[8px] sm:text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</p>
                           <Link to={`/product/${product.id}`} className="block">
-                            <h3 className="text-2xl font-display font-bold text-brand group-hover:text-brand/70 transition-colors">{product.name}</h3>
+                            <h3 className="text-sm sm:text-2xl font-display font-bold text-brand group-hover:text-brand/70 transition-colors">{product.name}</h3>
                           </Link>
                         </div>
-                        <p className="text-xl font-display font-black text-brand">₹{product.price}</p>
+                        <p className="text-sm sm:text-xl font-display font-black text-brand">₹{product.price}</p>
                       </div>
                       
                       <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto gap-4">

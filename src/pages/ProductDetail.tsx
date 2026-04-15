@@ -156,7 +156,7 @@ const ProductDetail = () => {
               </div>
 
               <p className="text-zinc-500 font-light text-base sm:text-lg leading-relaxed">
-                {product.description}
+                {product.shortDescription || (product.description && product.description.replace(/<[^>]*>?/gm, ''))}
               </p>
             </div>
 
@@ -283,7 +283,12 @@ const ProductDetail = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="text-zinc-500 font-light leading-relaxed text-sm"
                   >
-                    {activeTab === 'description' && product.description}
+                    {activeTab === 'description' && (
+                      <div 
+                        className="space-y-4 [&>p]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>h1]:text-lg [&>h2]:text-base [&>h3]:text-sm [&>strong]:font-bold"
+                        dangerouslySetInnerHTML={{ __html: product.description }} 
+                      />
+                    )}
                     {activeTab === 'ingredients' && (
                       <div className="flex flex-wrap gap-2">
                         {product.ingredients.map(ing => (
@@ -309,7 +314,7 @@ const ProductDetail = () => {
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {products.filter(p => p.id !== id).slice(0, 4).map((p) => (
             <Link key={p.id} to={`/product/${p.id}`} className="group space-y-6">
               <div className="aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-50 premium-shadow">
@@ -321,8 +326,8 @@ const ProductDetail = () => {
                 />
               </div>
               <div className="space-y-2 px-2">
-                <h4 className="font-display font-bold text-xl text-brand group-hover:text-brand transition-colors">{p.name}</h4>
-                <p className="text-zinc-400 font-display font-black">₹{p.price}</p>
+                <h4 className="font-display font-bold text-sm sm:text-xl text-brand group-hover:text-brand transition-colors">{p.name}</h4>
+                <p className="text-sm sm:text-base text-zinc-400 font-display font-black">₹{p.price}</p>
               </div>
             </Link>
           ))}

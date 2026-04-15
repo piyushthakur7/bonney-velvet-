@@ -13,6 +13,7 @@ export interface Product {
   image: string;
   images: string[];
   description: string;
+  shortDescription?: string;
   benefits: string[];
   ingredients: string[];
   howToUse: string;
