@@ -48,12 +48,7 @@ const Home = () => {
           <p className="text-white font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md">
             Biggest sale of the season
           </p>
-          <div className="bg-[#fce882] px-6 py-2 rounded-lg ext-blue-950 font-black text-xl mb-2 premium-shadow transform -rotate-2">
-            BUY 2 GET 4 FREE
-          </div>
-          <div className="bg-white/90 text-blue-950 px-4 py-1 rounded font-bold text-sm shadow-sm inline-block">
-            Code: B2G4
-          </div>
+
         </div>
         
         {/* Decorative product images floating in banner (Mocking the vibe) */}

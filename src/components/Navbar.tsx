@@ -15,7 +15,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [showTopBanner, setShowTopBanner] = React.useState(true);
+
   const [scrolled, setScrolled] = React.useState(false);
   const { totalItems } = useCart();
   const location = useLocation();
@@ -46,23 +46,6 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
-      <AnimatePresence>
-        {showTopBanner && (
-          <motion.div
-            initial={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
-            className="bg-[#fce882] relative z-50 text-center py-2 px-4 flex items-center justify-center font-semibold text-sm"
-          >
-            Buy 2 Get 4 Free
-            <button 
-              onClick={() => setShowTopBanner(false)} 
-              className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
-            >
-              <X size={16} />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
       <nav className={`transition-all duration-500 w-full ${
         scrolled || isOpen ? 'bg-white/95 backdrop-blur-xl py-3 premium-shadow' : 'bg-white py-4'
       }`}>

@@ -120,20 +120,10 @@ const Checkout = () => {
 
       if (verification.status === 'success') {
         setCreatedOrderId(response.razorpay_order_id);
-        // 5. Save Order to Supabase
-        const { error: dbError } = await supabase.from('orders').insert([{
-          user_id: user?.id,
-          amount: total,
-          status: 'paid',
-          payment_id: response.razorpay_payment_id,
-          order_id: response.razorpay_order_id,
-          shipping_details: formData,
-          total_items: cart.length
-        }]);
+        
+        let finalUserId = user?.id;
 
-        if (dbError) throw dbError;
-
-        // 5.5 Create Account if requested
+        // 5. Create Account FIRST if requested (so we have a user_id for the order)
         if (formData.createAccount && !user) {
           try {
             const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -149,23 +139,44 @@ const Checkout = () => {
             if (signUpError) throw signUpError;
 
             if (signUpData.user) {
+              finalUserId = signUpData.user.id;
               await supabase.from('profiles').insert([
-                { id: signUpData.user.id, email: formData.email, full_name: formData.name }
+                { id: finalUserId, email: formData.email, full_name: formData.name }
               ]);
             }
           } catch (authError) {
-            console.error('Account Creation Error:', authError);
+            console.error('Account Creation Error during checkout:', authError);
+            // We proceed with order creation even if account signup fails (e.g. email exists)
           }
         }
 
-        // 6. Sync Order to WooCommerce (Optional but recommended)
+        // 6. Save Order to Supabase (with the correct UserId)
+        const { error: dbError } = await supabase.from('orders').insert([{
+          user_id: finalUserId, // Using the new ID if we just created an account
+          amount: total,
+          status: 'paid',
+          payment_id: response.razorpay_payment_id,
+          order_id: response.razorpay_order_id,
+          shipping_details: formData,
+          total_items: cart.length
+        }]);
+
+        if (dbError) {
+          console.error('Supabase Order Error:', dbError.message);
+          // If RLS fails, we inform the console but proceed with business-critical syncs
+          if (dbError.message.includes('row-level security')) {
+            console.warn('RLS Violation: Please ensure the "orders" table allows public inserts for guests or requires authentication.');
+          }
+        }
+
+        // 7. Business-Critical Syncs (WooCommerce & Shiprocket)
+        // These are decoupled from Supabase state to ensure orders aren't lost to the client.
         try {
           await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
         } catch (wcError) {
           console.error('WooCommerce Sync Error:', wcError);
         }
 
-        // 7. Sync Order to Shiprocket for Fulfillment
         try {
           await syncOrderToShiprocket(cart, formData, total);
         } catch (srError) {
