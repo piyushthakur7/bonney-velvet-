@@ -168,10 +168,7 @@ const PRODUCT_DATA: Record<string, ProductSection[]> = {
 // Copy structure for fallback IDs
 PRODUCT_DATA["13"] = PRODUCT_DATA["39"];
 PRODUCT_DATA["9"] = PRODUCT_DATA["30"];
-reduces breakage), Argan Oil (nourishes & boosts shine), Kerazyme MB (supports structure & elasticity)" }
-    ]
-  }
-};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -359,7 +356,13 @@ const ProductDetail = () => {
                       }`}
                     >
                       {v.label}
-                    </b            {/* Actions */}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
             <div className="space-y-6 pt-6 border-t border-zinc-100">
               <div className="flex items-center space-x-6">
                 <div className="flex items-center bg-zinc-50 rounded-full px-6 py-3 border border-zinc-100">
@@ -496,9 +499,9 @@ const SpecAccordion = ({ title, type, content }: { title: string; type: string; 
               {type === 'table' && (
                 <div className="space-y-4">
                   {content.map((item: any, idx: number) => (
-                    <div key={idx} className="flex">
-                      <span className="w-1/3 text-sm font-bold text-zinc-900">{item.label}</span>
-                      <span className="w-2/3 text-sm font-light leading-relaxed">{item.value}</span>
+                    <div key={idx} className="flex flex-col sm:flex-row border-b border-zinc-50 last:border-0 py-2 sm:py-0">
+                      <span className="w-full sm:w-1/3 text-sm font-bold text-zinc-900 mb-1 sm:mb-0">{item.label}</span>
+                      <span className="w-full sm:w-2/3 text-sm font-light leading-relaxed text-zinc-600">{item.value}</span>
                     </div>
                   ))}
                 </div>
