@@ -12,155 +12,163 @@ import { useCart } from '../CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 import BrandTrustBar from '../components/BrandTrustBar';
 
-// ── Hardcoded product details by ID ─────────────────────────────
-const PRODUCT_DATA: Record<string, {
-  highlights: string[];
-  info: { label: string; value: string }[];
-  features: { label: string; value: string }[];
-}> = {
+/// ── Hardcoded product details by ID ─────────────────────────────
+type ProductSection = {
+  title: string;
+  type: 'list' | 'table' | 'text';
+  content: any;
+};
+
+const PRODUCT_DATA: Record<string, ProductSection[]> = {
   // Sunscreen (ID 39 in live store, 13 in fallback)
-  "39": {
-    highlights: [
-      "SPF 50 PA+++ Broad Spectrum Sunscreen — Protects against harmful UVA & UVB rays with advanced UV filters including Tinosorb-M.",
-      "Vitamin C 5% Brightening Formula — Helps brighten skin, reduce dark spots, and enhance natural radiance.",
-      "Niacinamide 1% Oil Control Care — Refines pores, controls excess oil, and evens skin tone.",
-      "Aloe Vera & Vitamin E Soothing — Hydrates, calms, and comforts sun-exposed skin.",
-      "Lightweight Face & Body Use — Non-greasy, fast-absorbing sunscreen suitable for all skin types."
-    ],
-    info: [
-      { label: "Product Benefits", value: "Brightening, Dark Spot Correction, Oil Control, Sunburn Relief, Ultra-Violet Protection" },
-      { label: "Sun Protection Factor", value: "50 Sun Protection Factor (SPF)" },
-      { label: "Item Weight", value: "50 Grams" },
-      { label: "Number of Items", value: "1" },
-      { label: "Net Quantity", value: "50.0 Milliliters" },
-      { label: "Skin Type", value: "All" },
-      { label: "Active Ingredients", value: "Aloe Vera, Vitamin E, Niacinamide" },
-      { label: "Item Dimensions L×W×H", value: "50 × 40 × 155 Millimeters" },
-      { label: "Brand", value: "BONNY VELVET" },
-      { label: "Item Volume", value: "0.15 Kilograms" },
-      { label: "Country of Origin", value: "India" },
-      { label: "Manufacturer", value: "BIUMARK DERMACEUTICALS PVT.LTD. A-9 FIE 1st floor, Patparganj Industrial Area Delhi-110092 INDIA" },
-      { label: "Packer", value: "BONNY VELVET Plot-No 19. Shri Ravalnath Krupa Patel Nagar, Near Rajeev Nagar Vidyanagar, HUBLI KARNATAKA 580031 ph-8884770044" }
-    ],
-    features: [
-      { label: "Product Benefits", value: "Brightening, Dark Spot Correction, Oil Control, Sunburn Relief, Ultra-Violet Protection" },
-      { label: "Sun Protection Factor", value: "50 Sun Protection Factor (SPF)" },
-      { label: "Skin Type", value: "All" },
-      { label: "Water Resistance Level", value: "Water Resistant" },
-      { label: "Item Form", value: "Cream" },
-      { label: "Target Use Body Part", value: "Face, Arm" },
-      { label: "Material Features", value: "Cruelty Free, Non-Comedogenic, Vegan, Water Resistant" },
-      { label: "Material Type Free", value: "Alcohol Free, Paraben Free, Sulphate Free" },
-      { label: "Age Range Description", value: "Adult" },
-      { label: "Recommended Uses", value: "Beach, Daily Protection, Sports, Under Makeup" }
-    ]
-  },
-  "13": {
-    highlights: [
-      "SPF 50 PA+++ Broad Spectrum Sunscreen — Protects against harmful UVA & UVB rays with advanced UV filters including Tinosorb-M.",
-      "Vitamin C 5% Brightening Formula — Helps brighten skin, reduce dark spots, and enhance natural radiance.",
-      "Niacinamide 1% Oil Control Care — Refines pores, controls excess oil, and evens skin tone.",
-      "Aloe Vera & Vitamin E Soothing — Hydrates, calms, and comforts sun-exposed skin.",
-      "Lightweight Face & Body Use — Non-greasy, fast-absorbing sunscreen suitable for all skin types."
-    ],
-    info: [
-      { label: "Product Benefits", value: "Brightening, Dark Spot Correction, Oil Control, Sunburn Relief, Ultra-Violet Protection" },
-      { label: "Sun Protection Factor", value: "50 Sun Protection Factor (SPF)" },
-      { label: "Item Weight", value: "50 Grams" },
-      { label: "Number of Items", value: "1" },
-      { label: "Net Quantity", value: "50.0 Milliliters" },
-      { label: "Skin Type", value: "All" },
-      { label: "Active Ingredients", value: "Aloe Vera, Vitamin E, Niacinamide" },
-      { label: "Item Dimensions L×W×H", value: "50 × 40 × 155 Millimeters" },
-      { label: "Brand", value: "BONNY VELVET" },
-      { label: "Item Volume", value: "0.15 Kilograms" }
-    ],
-    features: [
-      { label: "Product Benefits", value: "Brightening, Dark Spot Correction, Oil Control, Sunburn Relief, Ultra-Violet Protection" },
-      { label: "Sun Protection Factor", value: "50 Sun Protection Factor (SPF)" },
-      { label: "Skin Type", value: "All" },
-      { label: "Water Resistance Level", value: "Water Resistant" },
-      { label: "Item Form", value: "Cream" },
-      { label: "Target Use Body Part", value: "Face, Arm" }
-    ]
-  },
+  "39": [
+    {
+      title: "Info",
+      type: "table",
+      content: [
+        { label: "Brand", value: "BONNY VELVET" },
+        { label: "Item Form", value: "Cream" },
+        { label: "Net Quantity", value: "50.0 Milliliters" },
+        { label: "Skin Type", value: "All" },
+        { label: "Sun Protection Factor", value: "50 SPF" },
+        { label: "Item Weight", value: "50 Grams" }
+      ]
+    },
+    {
+      title: "About this item",
+      type: "list",
+      content: [
+        "SPF 50 PA+++ Broad Spectrum Sunscreen — Protects against harmful UVA & UVB rays with advanced UV filters including Tinosorb-M.",
+        "Vitamin C 5% Brightening Formula — Helps brighten skin, reduce dark spots, and enhance natural radiance.",
+        "Niacinamide 1% Oil Control Care — Refines pores, controls excess oil, and evens skin tone.",
+        "Aloe Vera & Vitamin E Soothing — Hydrates, calms, and comforts sun-exposed skin.",
+        "Lightweight Face & Body Use — Non-greasy, fast-absorbing sunscreen suitable for all skin types."
+      ]
+    },
+    {
+      title: "Features & Specs",
+      type: "table",
+      content: [
+        { label: "Active Ingredients", value: "Aloe Vera, Vitamin E, Niacinamide" },
+        { label: "Water Resistance", value: "Water Resistant" },
+        { label: "Material Features", value: "Cruelty Free, Non-Comedogenic, Vegan" },
+        { label: "Material Type Free", value: "Alcohol Free, Paraben Free, Sulphate Free" }
+      ]
+    },
+    {
+      title: "Product details",
+      type: "table",
+      content: [
+        { label: "Manufacturer", value: "BIUMARK DERMACEUTICALS PVT.LTD. Delhi-110092 INDIA" },
+        { label: "Country of Origin", value: "India" },
+        { label: "Dimensions", value: "50 × 40 × 155 Millimeters" }
+      ]
+    }
+  ],
+  "13": [ /* Same as 39 */ ],
   // Hair Mask (ID 30 in live store, 9 in fallback)
-  "30": {
-    highlights: [
-      "Amino Advanced Bond Repair Care — Powered by Amino Bond Technology, this intensive formula helps repair weakened hair bonds, reduce breakage and improve overall hair strength.",
-      "Deep Conditioning for Dry & Damaged Hair — Rich, creamy texture penetrates deeply to restore moisture, softness and manageability from root to tip.",
-      "Enriched with Kerazyme MB & Argan Oil — Kerazyme MB helps support hair structure while Argan Oil nourishes and adds natural shine without heaviness.",
-      "Restores Smoothness, Strength & Shine — Controls frizz, improves elasticity and leaves hair visibly smoother, silkier and healthier-looking.",
-      "Sulfate Free Gentle Formula — Free from harsh sulfates, making it suitable for dry, chemically treated and frizzy hair types. Safe for regular use."
-    ],
-    info: [
-      { label: "Brand", value: "BONNY VELVET" },
-      { label: "Item Form", value: "Cream" },
-      { label: "Material Feature", value: "Cruelty Free, Natural, Recyclable" },
-      { label: "Hair Type", value: "All" },
-      { label: "Product Benefits", value: "Breakage Control, Conditioning, Damage Control, Frizz Control, Nourishing, pH Balance" },
-      { label: "Age Range (Description)", value: "Adult" },
-      { label: "Net Quantity", value: "200.0 Grams" },
-      { label: "Number of Items", value: "1" },
-      { label: "Scent", value: "Fresh" },
-      { label: "Material Type Free", value: "Mineral Oil Free, Palm Oil Free, Paraben Free" },
-      { label: "Item Weight", value: "200 g" },
-      { label: "Item Dimensions L×W×H", value: "8 × 8 × 6.5 Centimeters" },
-      { label: "Country of Origin", value: "India" }
-    ],
-    features: [
-      { label: "Item Form", value: "Cream" },
-      { label: "Hair Type", value: "All" },
-      { label: "Product Benefits", value: "Breakage Control, Conditioning, Damage Control, Frizz Control, Nourishing, pH Balance" },
-      { label: "Scent", value: "Fresh" },
-      { label: "Additional Features", value: "Amino Bond Technology, Intensive Deep Care, Kerazyme MB Formula, Not Tested On Animals, Sulfate Free Formula" },
-      { label: "Package Type", value: "Box" },
-      { label: "Hair Conditioner Type", value: "Hair Conditioning Mask" },
-      { label: "Brand", value: "BONNY VELVET" },
-      { label: "Age Range Description", value: "Adult" },
-      { label: "Manufacturer", value: "VARDA BIOLOGY PLOT NO. 88/A, SHIV INDUSTRIAL INFRA PARK, LAMDAPURA, savik, Gujarat, India-397775" },
-      { label: "Item Type Name", value: "Hair Treatment Mask" },
-      { label: "Packer", value: "Bonny Velvet Plot-no 19, Shri Ravalnath Krupa, Patel Nagar, Near Rajeev Nagar Vidyanagar, Hubli, Karnataka-580031" },
-      { label: "Active Ingredients", value: "Amino Bond Technology (repairs bonds & reduces breakage), Argan Oil (nourishes & boosts shine), Kerazyme MB (supports structure & elasticity)" }
-    ]
-  },
-  "9": {
-    highlights: [
-      "Amino Advanced Bond Repair Care — Powered by Amino Bond Technology, this intensive formula helps repair weakened hair bonds, reduce breakage and improve overall hair strength.",
-      "Deep Conditioning for Dry & Damaged Hair — Rich, creamy texture penetrates deeply to restore moisture, softness and manageability from root to tip.",
-      "Enriched with Kerazyme MB & Argan Oil — Kerazyme MB helps support hair structure while Argan Oil nourishes and adds natural shine without heaviness.",
-      "Restores Smoothness, Strength & Shine — Controls frizz, improves elasticity and leaves hair visibly smoother, silkier and healthier-looking.",
-      "Sulfate Free Gentle Formula — Free from harsh sulfates, making it suitable for dry, chemically treated and frizzy hair types. Safe for regular use."
-    ],
-    info: [
-      { label: "Brand", value: "BONNY VELVET" },
-      { label: "Item Form", value: "Cream" },
-      { label: "Material Feature", value: "Cruelty Free, Natural, Recyclable" },
-      { label: "Hair Type", value: "All" },
-      { label: "Product Benefits", value: "Breakage Control, Conditioning, Damage Control, Frizz Control, Nourishing, pH Balance" },
-      { label: "Age Range (Description)", value: "Adult" },
-      { label: "Net Quantity", value: "200.0 Grams" },
-      { label: "Number of Items", value: "1" },
-      { label: "Scent", value: "Fresh" },
-      { label: "Material Type Free", value: "Mineral Oil Free, Palm Oil Free, Paraben Free" },
-      { label: "Item Weight", value: "200 g" },
-      { label: "Item Dimensions L×W×H", value: "8 × 8 × 6.5 Centimeters" },
-      { label: "Country of Origin", value: "India" }
-    ],
-    features: [
-      { label: "Item Form", value: "Cream" },
-      { label: "Hair Type", value: "All" },
-      { label: "Product Benefits", value: "Breakage Control, Conditioning, Damage Control, Frizz Control, Nourishing, pH Balance" },
-      { label: "Scent", value: "Fresh" },
-      { label: "Additional Features", value: "Amino Bond Technology, Intensive Deep Care, Kerazyme MB Formula, Not Tested On Animals, Sulfate Free Formula" },
-      { label: "Package Type", value: "Box" },
-      { label: "Hair Conditioner Type", value: "Hair Conditioning Mask" },
-      { label: "Brand", value: "BONNY VELVET" },
-      { label: "Age Range Description", value: "Adult" },
-      { label: "Manufacturer", value: "VARDA BIOLOGY PLOT NO. 88/A, SHIV INDUSTRIAL INFRA PARK, LAMDAPURA, savik, Gujarat, India-397775" },
-      { label: "Item Type Name", value: "Hair Treatment Mask" },
-      { label: "Packer", value: "Bonny Velvet Plot-no 19, Shri Ravalnath Krupa, Patel Nagar, Near Rajeev Nagar Vidyanagar, Hubli, Karnataka-580031" },
-      { label: "Active Ingredients", value: "Amino Bond Technology (repairs bonds & reduces breakage), Argan Oil (nourishes & boosts shine), Kerazyme MB (supports structure & elasticity)" }
+  "30": [
+    {
+      title: "Info",
+      type: "table",
+      content: [
+        { label: "Brand", value: "BONNY VELVET" },
+        { label: "Item Form", value: "Cream" },
+        { label: "Material Feature", value: "Cruelty Free, Natural, Recyclable" },
+        { label: "Hair Type", value: "All" },
+        { label: "Product Benefits", value: "Breakage Control, Conditioning, Damage Control, Frizz Control, Nourishing, pH Balance" },
+        { label: "Age Range (Description)", value: "Adult" },
+        { label: "Net Quantity", value: "200.0 Grams" },
+        { label: "Number of Items", value: "1" },
+        { label: "Scent", value: "Fresh" },
+        { label: "Material Type Free", value: "Mineral Oil Free, Palm Oil Free, Paraben Free" }
+      ]
+    },
+    {
+      title: "About this item",
+      type: "list",
+      content: [
+        "Amino Advanced Bond Repair Care — Powered by Amino Bond Technology, this intensive formula helps repair weakened hair bonds, reduce breakage and improve overall hair strength.",
+        "Deep Conditioning for Dry & Damaged Hair — Rich, creamy texture penetrates deeply to restore moisture, softness and manageability from root to tip.",
+        "Enriched with Kerazyme MB & Argan Oil — Kerazyme MB helps support hair structure while Argan Oil nourishes and adds natural shine without heaviness.",
+        "Restores Smoothness, Strength & Shine — Controls frizz, improves elasticity and leaves hair visibly smoother, silkier and healthier-looking.",
+        "Sulfate Free Gentle Formula — Free from harsh sulfates, making it suitable for dry, chemically treated and frizzy hair types. Safe for regular use."
+      ]
+    },
+    {
+      title: "Features & Specs",
+      type: "table",
+      content: [
+        { label: "Item Form", value: "Cream" },
+        { label: "Hair Type", value: "All" },
+        { label: "Product Benefits", value: "Breakage Control, Conditioning, Damage Control, Frizz Control, Nourishing, pH Balance" },
+        { label: "Scent", value: "Fresh" },
+        { label: "Additional Features", value: "Amino Bond Technology, Intensive Deep Care, Kerazyme MB Formula, Not Tested On Animals, Sulfate Free Formula" },
+        { label: "Package Type Name", value: "Box" },
+        { label: "Hair Conditioner Type", value: "Hair Conditioning Mask" },
+        { label: "Brand", value: "BONNY VELVET" },
+        { label: "Age Range Description", value: "Adult" },
+        { label: "Manufacturer", value: "VARDA BIOLOGY PLOT NO. 88/A, SHIV INDUSTRIAL INFRA PARK, LAMDAPURA, savik, Gujarat, India-397775" },
+        { label: "Item Type Name", value: "Hair Treatment Mask" },
+        { label: "Country of Origin", value: "India" },
+        { label: "Packer Contact Information", value: "bonny Velvet Plot-no 19, Shri Ravalnath Krupa, Patel Nagar, Near Rajeev Nagar Vidyanagar, Hubli, Karnataka-580031 Email us: bonnyvelvet33@gmail.com Visit our web site: www.bonnyvelvet.com Customer Care: 8884770044" }
+      ]
+    },
+    {
+      title: "Item details",
+      type: "table",
+      content: [
+        { label: "Material Features", value: "Cruelty Free, Natural, Recyclable" },
+        { label: "Material Type Free", value: "Mineral Oil Free, Palm Oil Free, Paraben Free" }
+      ]
+    },
+    {
+      title: "Materials & Care",
+      type: "table",
+      content: [
+        { label: "Active Ingredients", value: "Amino Bond Technology Helps repair weakened hair bonds, strengthen strands and reduce breakage., Argan Oil Deeply nourishes dry hair, adds softness and boosts natural shine., Kerazyme MB Supports hair structure, improves elasticity and enhances overall hair health." }
+      ]
+    },
+    {
+      title: "Ingredients",
+      type: "text",
+      content: "Water (Aqua), Behentrimonium Methosulfate, Cetyl Alcohol, 1,3-Butylene Glycol, Cetearyl Alcohol, Xylitylglucoside, Anhydroxylitol, Maltitol, Xylitol, Pelvetia Canaliculata Extract, Cocamidopropyl Hydroxysultaine, Cocamidopropyl Betaine, Glycerin, Propanediol, Betaine, Panthenol, Brassicamidopropyl Dimethylamine, Polyester-11, Aloe Barbadensis Leaf Extract, Tocopheryl Acetate, Acetamide MEA, Sorbitol, Sodium Cocoyl Collagen Amino Acids, Cocoyl Sarcosine, Argania Spinosa Kernel Oil, Caprylyl/Capryl Glucoside, PRODEW® 500 (Sodium PCA, Sodium Lactate, Arginine, Aspartic Acid, PCA, Glycine, Alanine, Serine, Valine, Proline, Threonine, Isoleucine, Histidine, Phenylalanine, Water), Fision® KeraVeg18 (Aqua, Wheat Amino Acids, Soy Amino Acids, Arginine HCI, Serine, Threonine, Benzyl Alcohol, Potassium Sorbate, Sodium Benzoate), Caprylic/Capric Triglycerides, Phenoxyethanol, Fragrance"
+    },
+    {
+      title: "Measurements",
+      type: "table",
+      content: [
+        { label: "Unit Count", value: "200.0 Grams" },
+        { label: "Number of Items", value: "1" },
+        { label: "Item Dimensions", value: "8 x 8 x 6.5 Centimeters" },
+        { label: "Item Weight", value: "200 Grams" }
+      ]
+    },
+    {
+      title: "Product details",
+      type: "table",
+      content: [
+        { label: "Product Dimensions", value: "8 x 8 x 6.5 cm; 200 g" },
+        { label: "Date First Available", value: "22 February 2026" },
+        { label: "Manufacturer", value: "VARDA BIOLOGY PLOT NO. 88/A, SHIV INDUSTRIAL INFRA PARK, LAMDAPURA, savik, Gujarat, India-397775" },
+        { label: "ASIN", value: "B0GPSDN75P" },
+        { label: "Item part number", value: "hairmask06" },
+        { label: "Country of Origin", value: "India" },
+        { label: "Packer", value: "bonny Velvet Plot-no 19, Shri Ravalnath Krupa, Patel Nagar, Near Rajeev Nagar Vidyanagar, Hubli, Karnataka-580031 Email us: bonnyvelvet33@gmail.com Visit our web site: www.bonnyvelvet.com Customer Care: 8884770044" },
+        { label: "Item Weight", value: "200 g" },
+        { label: "Item Dimensions LxWxH", value: "8 x 8 x 6.5 Centimeters" },
+        { label: "Net Quantity", value: "200.0 Grams" },
+        { label: "Generic Name", value: "Hair Treatment Mask" }
+      ]
+    }
+  ],
+  "9": [ /* Copy of 30 below in actual implementation */ ]
+};
+
+// Copy structure for fallback IDs
+PRODUCT_DATA["13"] = PRODUCT_DATA["39"];
+PRODUCT_DATA["9"] = PRODUCT_DATA["30"];
+reduces breakage), Argan Oil (nourishes & boosts shine), Kerazyme MB (supports structure & elasticity)" }
     ]
   }
 };
@@ -351,14 +359,7 @@ const ProductDetail = () => {
                       }`}
                     >
                       {v.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-
-            {/* Actions */}
+                    </b            {/* Actions */}
             <div className="space-y-6 pt-6 border-t border-zinc-100">
               <div className="flex items-center space-x-6">
                 <div className="flex items-center bg-zinc-50 rounded-full px-6 py-3 border border-zinc-100">
@@ -418,65 +419,12 @@ const ProductDetail = () => {
               </button>
             </div>
 
-            {/* Tabs */}
-            <div className="space-y-6">
-              <div className="flex space-x-8 border-b border-zinc-100">
-                {['description', 'ingredients', 'usage'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`pb-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all relative ${
-                      activeTab === tab ? 'text-brand' : 'text-zinc-400'
-                    }`}
-                  >
-                    {tab}
-                    {activeTab === tab && (
-                      <motion.div 
-                        layoutId="activeTab"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand"
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
-              
-              <div className="min-h-[100px]">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="text-zinc-500 font-light leading-relaxed text-sm"
-                  >
-                    {activeTab === 'description' && (
-                      <div 
-                        className="space-y-4 [&>p]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>h1]:text-lg [&>h2]:text-base [&>h3]:text-sm [&>strong]:font-bold"
-                        dangerouslySetInnerHTML={{ __html: product.description }} 
-                      />
-                    )}
-                    {activeTab === 'ingredients' && (
-                      <div className="flex flex-wrap gap-2">
-                        {product.ingredients.map(ing => (
-                          <span key={ing} className="px-4 py-2 bg-zinc-50 rounded-full border border-zinc-100">{ing}</span>
-                        ))}
-                      </div>
-                    )}
-                    {activeTab === 'usage' && product.howToUse}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Hardcoded Info & Features Accordions by Product ID */}
+            {/* Redesigned Technical Specifications Accordions */}
             {PRODUCT_DATA[id!] && (
-              <div className="space-y-4 pt-12 border-t border-zinc-100">
-                {PRODUCT_DATA[id!].info && (
-                  <SpecAccordion title="Info" items={PRODUCT_DATA[id!].info} />
-                )}
-                {PRODUCT_DATA[id!].features && (
-                  <SpecAccordion title="Features & Specs" items={PRODUCT_DATA[id!].features} />
-                )}
+              <div className="space-y-0 pt-12 border-t border-zinc-100 divide-y divide-zinc-200">
+                {PRODUCT_DATA[id!].map((section, idx) => (
+                  <SpecAccordion key={idx} title={section.title} type={section.type} content={section.content} />
+                ))}
               </div>
             )}
           </div>
@@ -515,22 +463,26 @@ const ProductDetail = () => {
   );
 };
 
-const SpecAccordion = ({ title, items }: { title: string; items: { label: string; value: string }[] }) => {
-  const [isOpen, setIsOpen] = useState(true);
+const SpecAccordion = ({ title, type, content }: { title: string; type: string; content: any }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-zinc-100 rounded-2xl overflow-hidden">
+    <div className="overflow-hidden border-b border-zinc-200 last:border-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 bg-zinc-50/50 hover:bg-zinc-50 transition-colors"
+        className="w-full flex items-center justify-between py-6 group hover:bg-zinc-50/50 transition-colors px-2"
       >
-        <span className="text-sm font-bold text-brand">{title}</span>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          <ChevronDown size={18} className="text-zinc-400" />
-        </motion.div>
+        <span className="text-base font-medium text-[#111]">{title}</span>
+        <div className="relative w-6 h-6 flex items-center justify-center">
+          <motion.div
+            animate={{ rotate: isOpen ? 90 : 0 }}
+            className="absolute w-4 h-[2px] bg-black"
+          />
+          <motion.div
+            animate={{ rotate: isOpen ? 0 : 90 }}
+            className="absolute w-4 h-[2px] bg-black"
+          />
+        </div>
       </button>
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -540,21 +492,32 @@ const SpecAccordion = ({ title, items }: { title: string; items: { label: string
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className="p-0 border-t border-zinc-100">
-              <table className="w-full text-left border-collapse">
-                <tbody>
-                  {items.map((item, idx) => (
-                    <tr key={idx} className="border-b border-zinc-50 last:border-0 hover:bg-zinc-50/30 transition-colors">
-                      <td className="py-4 px-6 text-[10px] font-black uppercase tracking-widest text-zinc-400 w-2/5 align-top border-r border-zinc-50">
-                        {item.label}
-                      </td>
-                      <td className="py-4 px-6 text-sm text-zinc-600 font-light leading-relaxed">
-                        {item.value}
-                      </td>
-                    </tr>
+            <div className="pb-8 px-2 text-[#333]">
+              {type === 'table' && (
+                <div className="space-y-4">
+                  {content.map((item: any, idx: number) => (
+                    <div key={idx} className="flex">
+                      <span className="w-1/3 text-sm font-bold text-zinc-900">{item.label}</span>
+                      <span className="w-2/3 text-sm font-light leading-relaxed">{item.value}</span>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              )}
+              {type === 'list' && (
+                <ul className="space-y-3">
+                  {content.map((point: string, idx: number) => (
+                    <li key={idx} className="flex items-start text-sm font-light leading-snug">
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand/40 mt-1.5 mr-3 shrink-0" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {type === 'text' && (
+                <p className="text-sm font-light leading-relaxed text-zinc-600 whitespace-pre-wrap">
+                  {content}
+                </p>
+              )}
             </div>
           </motion.div>
         )}
@@ -564,3 +527,4 @@ const SpecAccordion = ({ title, items }: { title: string; items: { label: string
 };
 
 export default ProductDetail;
+
