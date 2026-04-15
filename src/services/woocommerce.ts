@@ -77,7 +77,14 @@ export const fetchWooCommerceProducts = async (): Promise<Product[]> => {
         name: p.name,
         price: parseFloat(p.price || '0'),
         originalPrice: p.regular_price ? parseFloat(p.regular_price) : undefined,
-        category: p.categories?.length > 0 ? p.categories[0].name : 'Uncategorized',
+        category: (() => {
+          const cat = p.categories?.length > 0 ? p.categories[0].name : 'Uncategorized';
+          const name = p.name.toLowerCase();
+          if (name.includes('scrub') || name.includes('face wash') || name.includes('jojoba')) {
+            return 'Face Scrub';
+          }
+          return cat;
+        })(),
         // Map attributes like 'concern', 'benefits', 'ingredients' if they exist
         concern: p.attributes?.find((a: any) => a.name.toLowerCase() === 'concern')?.options || [],
         image: p.images?.length > 0 ? p.images[0].src : 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600&h=800',

@@ -12,9 +12,10 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'Sunscreens': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=200&h=200',
   'Serums': 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80&w=200&h=200',
   'Masks': 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=200&h=200',
+  'Face Scrub': 'https://plus.unsplash.com/premium_photo-1679051034451-2401666bc7f7?auto=format&fit=crop&q=80&w=200&h=200',
 };
 
-const BUBBLE_CATEGORIES = ['Summer Picks', 'Sunscreens', 'Serums', 'Masks'];
+const BUBBLE_CATEGORIES = ['Summer Picks', 'Sunscreens', 'Serums', 'Masks', 'Face Scrub'];
 
 const Home = () => {
   const { products, loading } = useData();

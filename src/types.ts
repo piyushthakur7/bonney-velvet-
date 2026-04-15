@@ -8,8 +8,8 @@ export interface Product {
   name: string;
   price: number;
   originalPrice?: number;
-  category: 'Serums' | 'Sunscreens' | 'Moisturizers' | 'Masks';
-  concern: ('Acne' | 'Dryness' | 'Glow' | 'Repair' | 'Anti-Aging')[];
+  category: string;
+  concern: string[];
   image: string;
   images: string[];
   description: string;
