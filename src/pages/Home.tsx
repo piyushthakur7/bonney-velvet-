@@ -250,7 +250,10 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow flex flex-col relative h-full">
       {/* Top Image Section */}
-      <Link to={`/product/${product.id}`} className="bg-zinc-50 w-full aspect-square relative overflow-hidden group block">
+      <Link to={`/product/${product.id}`} className="bg-zinc-50/50 w-full aspect-square relative overflow-hidden group block">
+        {/* Decorative background glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        
         {/* Badges positioned absolute */}
         {product.badge && (
           <div className="absolute top-3 left-0 pl-3 z-10">
@@ -262,12 +265,12 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
         <motion.img 
-          initial={{ scale: 1 }}
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.7 }}
+          initial={{ scale: 0.95, opacity: 0.95 }}
+          whileHover={{ scale: 1.05, opacity: 1 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           src={product.image} 
           alt={product.name}
-          className="absolute inset-0 w-full h-full object-contain p-6" 
+          className="absolute inset-0 w-full h-full object-contain p-3 sm:p-5" 
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -309,12 +312,18 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
 
-        {/* Footer (Action) */}
-        <div className="flex items-center justify-end pt-4 sm:pt-6 border-t border-zinc-100 mt-auto gap-4 w-full">
+        {/* Footer (Action & Price) */}
+        <div className="flex items-center justify-between pt-4 sm:pt-6 border-t border-zinc-100 mt-auto gap-4 w-full">
+           <div className="flex flex-col">
+             {product.originalPrice && product.originalPrice > product.price && (
+               <span className="text-[10px] sm:text-xs text-zinc-400 line-through font-medium">₹{product.originalPrice}</span>
+             )}
+             <span className="text-base sm:text-xl font-display font-black text-brand tracking-tight">₹{product.price}</span>
+           </div>
            <button 
              onClick={handleAddToCart}
-             className={`flex-1 h-10 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center space-x-1.5 font-black uppercase tracking-widest text-[8px] sm:text-[10px] transition-all ${
-               isAdded ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:scale-[1.02]'
+             className={`flex-1 h-10 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center space-x-1.5 font-black uppercase tracking-widest text-[8px] sm:text-[10px] transition-all shadow-sm ${
+               isAdded ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:shadow-md hover:scale-[1.02]'
              }`}
            >
              {isAdded ? (

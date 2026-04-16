@@ -560,17 +560,6 @@ const Checkout = () => {
                 </span>
               </div>
               <div className="pt-6 border-t border-zinc-200 flex justify-between items-baseline px-2">
-              <div className="flex justify-between text-zinc-500 text-sm">
-                <span className="uppercase tracking-widest font-bold text-[10px]">Subtotal</span>
-                <span className="text-brand font-black">₹{subtotal}</span>
-              </div>
-              <div className="flex justify-between text-zinc-500 text-sm">
-                <span className="uppercase tracking-widest font-bold text-[10px]">Shipping</span>
-                <span className="text-brand font-black">
-                  {shippingFee === 0 ? "FREE" : `₹${shippingFee}`}
-                </span>
-              </div>
-              <div className="pt-6 border-t border-zinc-200 flex justify-between items-baseline">
                 <span className="text-brand font-display font-black text-xl uppercase italic">Total</span>
                 <span className="text-3xl font-display font-black text-brand tracking-tighter">₹{total}</span>
               </div>

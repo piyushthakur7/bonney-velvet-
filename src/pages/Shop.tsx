@@ -229,11 +229,14 @@ const Shop = () => {
                     animate={{ opacity: 1 }}
                     className="group flex flex-col h-full space-y-5"
                   >
-                    <Link to={`/product/${product.id}`} className="block relative aspect-square rounded-[2.5rem] overflow-hidden bg-zinc-50 premium-shadow">
+                    <Link to={`/product/${product.id}`} className="block relative aspect-square rounded-[2.5rem] overflow-hidden bg-zinc-50/50 premium-shadow group">
+                      {/* Decorative background glow */}
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                      
                       <img 
                         src={product.image} 
                         alt={product.name}
-                        className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-700"
+                        className="w-full h-full object-contain p-3 sm:p-5 group-hover:scale-105 transition-transform duration-700"
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -242,7 +245,7 @@ const Shop = () => {
                         onClick={(e) => handleQuickAdd(e, product)}
                         className="absolute top-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20"
                       >
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center premium-shadow transition-colors ${
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-colors ${
                           addedId === product.id ? 'bg-green-600 text-white' : 'bg-white text-brand'
                         }`}>
                           <AnimatePresence mode="wait">
@@ -271,20 +274,23 @@ const Shop = () => {
                     </Link>
                     
                     <div className="flex flex-col flex-1 space-y-4 px-2">
-                      <div className="flex justify-between items-start gap-2">
-                        <div className="space-y-1 flex-1">
-                          <p className="text-[8px] sm:text-[10px] font-black text-brand/40 uppercase tracking-[0.3em]">{product.category}</p>
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="space-y-1.5 flex-1">
+                          <p className="text-[8px] sm:text-[10px] font-black text-brand/30 uppercase tracking-[0.4em]">{product.category}</p>
                           <Link to={`/product/${product.id}`} className="block">
-                            <h3 className="text-sm sm:text-xl font-display font-bold text-brand group-hover:text-brand/70 transition-colors line-clamp-2 min-h-[3rem]">{product.name}</h3>
+                            <h3 className="text-sm sm:text-lg font-display font-bold text-brand group-hover:text-brand/70 transition-colors line-clamp-2 min-h-[2.5rem] sm:min-h-[3.5rem] leading-tight italic">{product.name}</h3>
                           </Link>
                         </div>
-                        <p className="text-sm sm:text-lg font-display font-black text-brand shrink-0">₹{product.price}</p>
+                        <div className="flex flex-col items-end">
+                           {product.originalPrice && product.originalPrice > product.price && (
+                             <span className="text-[10px] sm:text-xs text-zinc-400 line-through font-medium">₹{product.originalPrice}</span>
+                           )}
+                           <p className="text-base sm:text-xl font-display font-black text-brand tracking-tight">₹{product.price}</p>
+                        </div>
                       </div>
                       
-
-                        
                       <div className="flex items-center justify-between pt-4 border-t border-zinc-100 mt-auto gap-4">
-                        <div className="flex flex-wrap gap-2">
+                        <div className="hidden sm:flex flex-wrap gap-2">
                           {product.concern?.slice(0, 1).map(c => (
                             <span key={c} className="text-[8px] font-black uppercase tracking-widest text-zinc-400 border border-zinc-100 px-2 py-1 rounded">
                               {c}
@@ -293,8 +299,8 @@ const Shop = () => {
                         </div>
                         <button 
                           onClick={(e) => handleQuickAdd(e, product)}
-                          className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[10px] transition-all ${
-                            addedId === product.id ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:scale-[1.02]'
+                          className={`flex-1 h-12 rounded-xl flex items-center justify-center space-x-2 font-black uppercase tracking-widest text-[9px] sm:text-[10px] transition-all shadow-sm ${
+                            addedId === product.id ? 'bg-green-600 text-white' : 'bg-brand text-white hover:bg-brand/90 hover:scale-[1.02] hover:shadow-md'
                           }`}
                         >
                           {addedId === product.id ? (
