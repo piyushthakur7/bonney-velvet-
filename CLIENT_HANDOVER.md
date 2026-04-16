@@ -1,30 +1,32 @@
-# Bonny Velvet - Client Handover Management Guide
+# Bonny Velvet - Client Management Guide
 
-This guide explains how to manage your new e-commerce store.
+This guide explains how to manage your new premium e-commerce store and fulfill the ritual of luxury skincare.
 
 ## 1. Managing Inventory (WordPress/WooCommerce)
-Your website is synced with your WordPress store. To update products:
-- **Add/Edit Products**: Log in to your WordPress dashboard and navigate to **Products**.
-- **Images & Pricing**: Any changes made in WordPress (price, images, description) will automatically reflect on the website.
-- **Stock**: The "In Stock" status is also pulled directly from WooCommerce.
+Your website is live-synced with your WordPress store. 
+- **Add/Edit Products**: Use the WordPress dashboard under **Products**.
+- **Images & Pricing**: Changes to prices or images reflect instantly on the website.
+- **Enrichment**: We use a custom "Product Enrichment" layer for details like "About this item" and "Specs" to maintain a premium look.
 
-## 2. Managing Orders
-Orders are recorded in two places for maximum reliability:
-1.  **WordPress Dashboard**: Go to **WooCommerce > Orders**. You will see the customer name, items purchased, and the Razorpay Payment ID.
-2.  **Supabase Database**: A backup of all orders is stored in the cloud database for analytical purposes and user account history.
+## 2. Fulfillment Flow
+Orders are processed through a highly reliable multi-stage sync:
+1.  **WooCommerce**: Recorded instantly in **WooCommerce > Orders**.
+2.  **Shiprocket**: Automated order creation is **Active**. Shipments are queued in your Shiprocket dashboard for label generation.
+3.  **Supabase Database**: A master record is kept in the cloud for user order history and analytics.
 
-## 3. Managing Payments (Razorpay)
-- **Refunds**: If you need to refund a customer, do so via the **Razorpay Dashboard**.
-- **Settlements**: Razorpay will automatically settle payments to your bank account based on your settlement cycle.
+## 3. Payments (Razorpay)
+- **Security**: All payments are secured via Razorpay. 
+- **Verification**: The system uses a secure backend bridge to verify payment signatures before confirming orders.
+- **Refunds**: Process refunds directly in your **Razorpay Dashboard**.
 
-## 4. Shipping & Delivery
-- **Manual Booking**: Currently, you can manually book shipments using the customer details found in the WooCommerce order.
-- **Shiprocket Ready**: The website is pre-configured to support **Shiprocket**. Once you provide your Shiprocket API keys, automated label generation can be enabled.
+## 4. Brand Management
+- **Hero Banner**: The homepage features a high-impact, premium visual section. To update this image, replace `public/images/hero-banner.png`.
+- **Trust Elements**: We have integrated a **Brand Trust Bar** across the site to build customer confidence (Vegan, Cruelty-Free, etc.).
 
-## 5. Security Checklist
+## 5. Deployment & Security
 > [!IMPORTANT]
-> **Environment Variables**: Ensure your production environment (Vercel/Netlify) has the correct `RAZORPAY_KEY_SECRET` and `WC_CONSUMER_SECRET`.
-> **SSL**: Always ensure the WordPress site has a valid SSL certificate (HTTPS) so the API can communicate securely.
+> **Environment Variables**: Ensure your production environment has the correct `RAZORPAY_KEY_SECRET`, `VITE_WC_CONSUMER_SECRET`, and `VITE_SHIPROCKET_PASSWORD`.
+> **SSL**: The API communicates over HTTPS. Ensure your WordPress site has a valid SSL certificate.
 
 ---
-*Developed with ❤️ for Bonny Velvet.*
+*Developed with ❤️ for the Bonny Velvet Ritual.*
