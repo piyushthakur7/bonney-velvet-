@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useData } from '../DataContext';
@@ -12,7 +12,7 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'Sunscreens': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=200&h=200',
   'Serums': 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80&w=200&h=200',
   'Masks': 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=200&h=200',
-  'Face Scrub': 'https://plus.unsplash.com/premium_photo-1679051034451-2401666bc7f7?auto=format&fit=crop&q=80&w=200&h=200',
+  'Face Scrub': 'https://images.unsplash.com/photo-1552046447-4886817b3554?auto=format&fit=crop&q=80&w=200&h=200',
 };
 
 const BUBBLE_CATEGORIES = ['Summer Picks', 'Sunscreens', 'Serums', 'Masks', 'Face Scrub'];
@@ -21,10 +21,24 @@ const Home = () => {
   const { products, loading } = useData();
   const [activeCategory, setActiveCategory] = useState('Summer Picks');
 
-  // We mock the "Summer Picks" by taking the first 4 products, else filter by category
-  const filteredProducts = activeCategory === 'Summer Picks' 
-    ? products.slice(0, 4) 
-    : products.filter(p => p.category === activeCategory);
+  // Intelligent keyword-based filtering for the UI bubbles
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === 'Summer Picks') return products.slice(0, 4);
+    
+    const query = activeCategory.toLowerCase();
+    return products.filter(p => {
+      const name = p.name.toLowerCase();
+      const cat = p.category?.toLowerCase() || '';
+      const desc = p.description?.toLowerCase() || '';
+      
+      if (query === 'sunscreens') return name.includes('sunscreen') || cat.includes('sunscreen') || name.includes('spf');
+      if (query === 'serums') return name.includes('serum') || name.includes('gel') || cat.includes('serum');
+      if (query === 'masks') return name.includes('mask') || cat.includes('mask');
+      if (query === 'face scrub') return name.includes('scrub') || cat.includes('scrub') || desc.includes('scrub');
+      
+      return cat === query || name.includes(query);
+    });
+  }, [activeCategory, products]);
 
   if (loading) {
     return (
