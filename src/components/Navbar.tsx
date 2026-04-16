@@ -78,7 +78,7 @@ const Navbar = () => {
           {/* Center: Logo */}
           <div className="flex justify-center flex-1">
             <Link to="/">
-              <img src="/logo.png" alt="Bonny Velvet" className="h-24 md:h-28 w-auto" />
+              <img src="/images/bonny-photoroom-EvQTANVJTagNJjqF.avif" alt="Bonny Velvet" className="h-24 md:h-28 w-auto" />
             </Link>
           </div>
 

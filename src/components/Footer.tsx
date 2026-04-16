@@ -14,7 +14,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Info */}
           <div className="space-y-6">
-            <img src="/logo.png" alt="Bonny Velvet" className="h-20 w-auto" />
+            <img src="/images/bonny-photoroom-EvQTANVJTagNJjqF.avif" alt="Bonny Velvet" className="h-20 w-auto" />
             <p className="text-zinc-500 text-sm leading-relaxed">
               Affordable luxury skincare specifically formulated for Indian skin. 
               Visible results, premium ingredients, minimal routine.
