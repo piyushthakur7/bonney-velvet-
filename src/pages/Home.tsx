@@ -40,19 +40,69 @@ const Home = () => {
 
   return (
     <div className="pb-32 bg-white mt-[84px]"> {/* Add margin to account for fixed navbar + top banner */}
-      {/* Hero Banner Section */}
-      <section className="bg-zinc-100 w-full px-4 py-8 relative overflow-hidden flex items-center justify-center min-h-[280px]">
-        <div className="relative z-10 text-center flex flex-col items-center">
-          <h3 className="text-zinc-900 font-black tracking-widest text-sm mb-1 uppercase drop-shadow-sm">Play On</h3>
-          <h1 className="text-4xl md:text-5xl font-black text-zinc-950 uppercase tracking-tighter mb-2" style={{ textShadow: '2px 2px 4px rgba(255,255,255,0.5)' }}>
-            Summer Sale
-          </h1>
-          <p className="text-zinc-500 font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md">
-            Biggest sale of the season
-          </p>
+      {/* Hero Banner Section - Premium Upgrade */}
+      <section className="relative w-full min-h-[500px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
+        {/* Background Image with Parallax-like feel */}
+        <motion.div 
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          className="absolute inset-0"
+        >
+          <img 
+            src="/images/hero-banner.png" 
+            alt="Bonney Velvet Premium Skincare"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent"></div>
+        </motion.div>
 
+        {/* Content Overlay */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
+          <motion.div 
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="max-w-2xl backdrop-blur-md bg-white/10 p-8 md:p-12 rounded-[2rem] border border-white/20 shadow-2xl"
+          >
+            <h3 className="text-brand-light font-black tracking-[0.4em] text-xs md:text-sm uppercase mb-4">
+              Premium Rituals
+            </h3>
+            <h1 className="text-5xl md:text-8xl font-display font-black text-white leading-none tracking-tighter mb-6 italic">
+              Bonney <br />
+              <span className="text-brand-light">Velvet</span>
+            </h1>
+            <p className="text-zinc-200 text-lg md:text-xl font-light leading-relaxed mb-8 max-w-lg">
+              Experience the luxury of velvet on your skin. Our summer collection is designed for the sophisticated soul.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link 
+                to="/shop" 
+                className="bg-brand text-white px-10 py-5 rounded-full font-black uppercase tracking-widest text-xs hover:bg-brand/90 transition-all hover:scale-105 shadow-xl"
+              >
+                Shop Collection
+              </Link>
+              <div className="flex items-center space-x-2 text-white/80 text-xs font-bold uppercase tracking-widest border border-white/20 px-6 py-5 rounded-full backdrop-blur-sm">
+                <Star size={14} className="text-brand-light" fill="currentColor" />
+                <span>4.9/5 Skin Rating</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
-        
+
+        {/* Floating Accent */}
+        <motion.div 
+          animate={{ y: [0, -20, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-10 right-10 hidden md:block"
+        >
+          <div className="w-32 h-32 border border-white/10 rounded-full flex items-center justify-center backdrop-blur-xl">
+            <div className="text-center">
+              <p className="text-brand-light font-black text-2xl leading-none">50%</p>
+              <p className="text-white text-[8px] font-black uppercase tracking-widest mt-1">Off Sale</p>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* Category Bubbles Container */}
