@@ -15,6 +15,12 @@ import { createWooCommerceOrder } from '../services/woocommerce';
 import { syncOrderToShiprocket } from '../services/shiprocket';
 
 
+const STEPS = [
+  { id: 'info', name: 'Information', icon: User },
+  { id: 'shipping', name: 'Shipping', icon: Truck },
+  { id: 'payment', name: 'Payment', icon: CreditCard },
+];
+
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, total, clearCart, subtotal, shippingFee } = useCart();
@@ -200,37 +206,64 @@ const Checkout = () => {
 
   if (success) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center bg-brand-light/20 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4 py-24">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-md w-full bg-white p-12 rounded-[3rem] text-center space-y-8 premium-shadow"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-2xl w-full bg-white p-8 md:p-16 rounded-[3rem] text-center space-y-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-zinc-100"
         >
-          <div className="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle2 size={48} />
+          <div className="relative mx-auto w-24 h-24">
+             <motion.div 
+               initial={{ scale: 0 }}
+               animate={{ scale: 1 }}
+               transition={{ type: "spring", damping: 12, stiffness: 200 }}
+               className="w-full h-full bg-brand text-white rounded-full flex items-center justify-center shadow-2xl"
+             >
+               <CheckCircle2 size={48} />
+             </motion.div>
+             <motion.div 
+               animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+               transition={{ duration: 2, repeat: Infinity }}
+               className="absolute inset-0 bg-brand rounded-full -z-10"
+             />
           </div>
+
           <div className="space-y-4">
-            <h1 className="text-4xl font-display font-black text-brand tracking-tight">Thank You!</h1>
-            <p className="text-zinc-500 font-light leading-relaxed">
-              Your order <span className="text-brand font-bold">#{createdOrderId.slice(0, 8)}</span> has been placed successfully. 
-            </p>
-            <div className="bg-zinc-50 p-6 rounded-3xl space-y-3">
-              <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Order Status</p>
-              <div className="flex items-center justify-center space-x-2 text-green-600 font-bold">
-                <Package size={16} />
-                <span>Payment Verified & Confirmed</span>
-              </div>
-            </div>
-            <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-4">
-              Track your ritual in <Link to="/account" className="text-brand underline">My Orders</Link>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-brand">Order Confirmed</h3>
+            <h1 className="text-4xl md:text-6xl font-display font-black text-brand tracking-tight italic">Aura of <span className="font-serif font-light text-zinc-300">Velvet</span></h1>
+            <p className="text-zinc-500 font-light text-lg">
+              Your order <span className="text-brand font-bold">#{createdOrderId.slice(0, 8).toUpperCase()}</span> is being prepared for its journey.
             </p>
           </div>
-          <Link 
-            to="/shop" 
-            className="block w-full bg-brand text-white font-bold py-5 rounded-full hover:bg-brand/90 transition-all uppercase tracking-widest text-xs"
-          >
-            Continue Shopping
-          </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            <div className="bg-zinc-50 p-6 rounded-3xl space-y-3">
+              <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center text-brand premium-shadow">
+                <Mail size={16} />
+              </div>
+              <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Confirmation Sent</p>
+              <p className="text-xs text-zinc-600 font-medium leading-relaxed">A ritual summary has been sent to your email.</p>
+            </div>
+            <div className="bg-zinc-50 p-6 rounded-3xl space-y-3">
+              <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center text-brand premium-shadow">
+                <Package size={16} />
+              </div>
+              <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Dispatch Timeline</p>
+              <p className="text-xs text-zinc-600 font-medium leading-relaxed">Expected shipment within 24-48 hours via Shiprocket.</p>
+            </div>
+          </div>
+
+          <div className="pt-8 space-y-4">
+            <Link 
+              to="/shop" 
+              className="block w-full bg-brand text-white font-black py-6 rounded-full hover:bg-brand/90 transition-all uppercase tracking-[0.2em] text-[10px] premium-shadow"
+            >
+              Continue the Ritual
+            </Link>
+            <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+              Need assistance? <Link to="/support" className="text-brand underline">Visit Support</Link>
+            </p>
+          </div>
         </motion.div>
       </div>
     );
@@ -289,11 +322,36 @@ const Checkout = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="flex items-center mb-12">
-        <button onClick={() => navigate(-1)} className="p-2 hover:bg-zinc-100 rounded-full text-zinc-400 hover:text-brand transition-colors">
-          <ArrowLeft size={24} />
-        </button>
-        <h1 className="text-4xl font-display font-black text-brand tracking-tight ml-4 italic">Checkout</h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
+        <div className="flex items-center">
+          <button onClick={() => navigate(-1)} className="p-2 hover:bg-zinc-100 rounded-full text-zinc-400 hover:text-brand transition-colors">
+            <ArrowLeft size={24} />
+          </button>
+          <h1 className="text-4xl font-display font-black text-brand tracking-tight ml-4 italic uppercase">Checkout</h1>
+        </div>
+
+        {/* Step Indicator */}
+        <div className="flex items-center space-x-4">
+          {STEPS.map((step, idx) => (
+            <React.Fragment key={step.id}>
+              <div className="flex items-center space-x-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black border-2 transition-all ${
+                  idx === 2 ? 'bg-zinc-50 border-zinc-200 text-zinc-400' : 'bg-brand border-brand text-white shadow-lg'
+                }`}>
+                  <step.icon size={14} />
+                </div>
+                <span className={`text-[10px] font-black uppercase tracking-widest hidden sm:block ${
+                  idx === 2 ? 'text-zinc-400' : 'text-brand'
+                }`}>
+                  {step.name}
+                </span>
+              </div>
+              {idx < STEPS.length - 1 && (
+                <div className="w-8 h-[2px] bg-zinc-100 rounded-full" />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
@@ -486,6 +544,22 @@ const Checkout = () => {
             </div>
 
             <div className="space-y-4 pt-8 border-t border-zinc-200">
+              <div className="flex justify-between items-center bg-white/50 p-4 rounded-2xl border border-white/20">
+                <span className="uppercase tracking-[0.2em] font-black text-[9px] text-zinc-400">Total Items</span>
+                <span className="text-brand font-black text-xs">{cart.length}</span>
+              </div>
+              
+              <div className="flex justify-between text-zinc-500 text-sm px-2">
+                <span className="uppercase tracking-widest font-bold text-[10px]">Subtotal</span>
+                <span className="text-brand font-black">₹{subtotal}</span>
+              </div>
+              <div className="flex justify-between text-zinc-500 text-sm px-2">
+                <span className="uppercase tracking-widest font-bold text-[10px]">Shipping</span>
+                <span className="text-brand font-black">
+                  {shippingFee === 0 ? "FREE" : `₹${shippingFee}`}
+                </span>
+              </div>
+              <div className="pt-6 border-t border-zinc-200 flex justify-between items-baseline px-2">
               <div className="flex justify-between text-zinc-500 text-sm">
                 <span className="uppercase tracking-widest font-bold text-[10px]">Subtotal</span>
                 <span className="text-brand font-black">₹{subtotal}</span>
