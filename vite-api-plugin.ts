@@ -27,19 +27,6 @@ export function viteApiPlugin(env: Record<string, string>): Plugin {
             const key_id = (env.VITE_RAZORPAY_KEY_ID || '').trim();
             const key_secret = (env.RAZORPAY_KEY_SECRET || env.VITE_RAZORPAY_KEY_SECRET || '').trim();
             
-            // --- FORCE MOCK MODE ---
-            // If keys are using the problematic values or missing, skip the live call to avoid hangs.
-            if (!key_id || !key_id.startsWith('rzp_live') || key_id === 'rzp_live_SZ0fAoSQUqZtsb') {
-              console.warn('FORCE MOCK: Skipping Razorpay SDK call to prevent hang.');
-              const mockOrder = {
-                id: `order_mock_${Math.random().toString(36).substring(7)}`,
-                amount: Math.round(amount * 100),
-                currency,
-                mock: true
-              };
-              res.setHeader('Content-Type', 'application/json');
-              return res.end(JSON.stringify(mockOrder));
-            }
 
             const instance = new Razorpay({
               key_id,
@@ -57,15 +44,8 @@ export function viteApiPlugin(env: Record<string, string>): Plugin {
           } catch (error: any) {
             console.error('Local API Error (create-order):', error);
             
-            // FALLBACK TO MOCK ON ANY ERROR
-            const mockOrder = {
-              id: `order_mock_${Math.random().toString(36).substring(7)}`,
-              amount: 0, 
-              currency: 'INR',
-              mock: true
-            };
-            res.setHeader('Content-Type', 'application/json');
-            return res.end(JSON.stringify(mockOrder));
+            res.statusCode = 500;
+            return res.end(JSON.stringify({ error: error.message || 'Failed to create Razorpay order' }));
           }
         }
 
@@ -75,12 +55,6 @@ export function viteApiPlugin(env: Record<string, string>): Plugin {
             const body = await getBody(req);
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = JSON.parse(body);
 
-            // If it's a mock order, always verify as success
-            if (razorpay_order_id?.startsWith('order_mock_')) {
-              console.log('MOCK MODE: Verifying payment as SUCCESS');
-              res.setHeader('Content-Type', 'application/json');
-              return res.end(JSON.stringify({ status: 'success', message: 'MOCK: Payment verified successfully' }));
-            }
 
             const env = server.config.env;
             const secret = env.RAZORPAY_KEY_SECRET || env.VITE_RAZORPAY_KEY_SECRET || '';

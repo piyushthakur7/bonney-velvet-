@@ -27,9 +27,7 @@ const Checkout = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [showMockModal, setShowMockModal] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState<string>('');
-  const [mockOptions, setMockOptions] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -100,13 +98,7 @@ const Checkout = () => {
         },
       };
 
-      if (orderData.mock || orderData.id?.startsWith('order_mock_')) {
-        setMockOptions(options);
-        setShowMockModal(true);
-        setLoading(false);
-      } else {
-        openRazorpayCheckout(options);
-      }
+      openRazorpayCheckout(options);
     } catch (err: any) {
       console.error('Checkout Error:', err);
       setLoading(false);
@@ -199,7 +191,6 @@ const Checkout = () => {
       alert('Error finalizing order: ' + err.message);
     } finally {
       setLoading(false);
-      setShowMockModal(false);
     }
   };
 
@@ -269,56 +260,6 @@ const Checkout = () => {
     );
   }
 
-  const MockPaymentModal = () => (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="bg-white max-w-sm w-full rounded-[3rem] p-10 text-center space-y-8 premium-shadow"
-      >
-        <div className="w-20 h-20 bg-brand-light rounded-3xl mx-auto flex items-center justify-center text-brand">
-          <CreditCard size={32} />
-        </div>
-        <div className="space-y-2">
-          <h3 className="text-2xl font-display font-black text-brand italic">Razorpay <span className="text-zinc-300">Simulated</span></h3>
-          <p className="text-sm text-zinc-500 font-light px-4">This is a simulated interface because your Razorpay keys are in "Mock Mode".</p>
-        </div>
-        
-        <div className="bg-zinc-50 p-6 rounded-3xl text-left space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Amount</span>
-            <span className="font-bold text-brand">₹{total}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Order ID</span>
-            <span className="font-bold text-zinc-600 text-[10px] truncate max-w-[120px]">{mockOptions?.order_id}</span>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <button 
-            onClick={() => finalizeOrder({
-              razorpay_order_id: mockOptions.order_id,
-              razorpay_payment_id: `pay_mock_${Math.random().toString(36).substring(7)}`,
-              razorpay_signature: 'mock_signature'
-            })}
-            className="w-full bg-brand text-white font-bold py-5 rounded-full hover:bg-brand/90 transition-all uppercase tracking-widest text-[10px] premium-shadow"
-          >
-            Simulate Successful Payment
-          </button>
-          <button 
-            onClick={() => {
-              setShowMockModal(false);
-              setLoading(false);
-            }}
-            className="text-[10px] font-black text-zinc-400 uppercase tracking-widest hover:text-red-500 transition-colors"
-          >
-            Cancel Payment
-          </button>
-        </div>
-      </motion.div>
-    </div>
-  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -583,7 +524,6 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-      {showMockModal && <MockPaymentModal />}
     </div>
   );
 };
