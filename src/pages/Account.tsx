@@ -13,7 +13,10 @@ const Account = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!user) return;
+      if (!user || !supabase) {
+        setLoading(false);
+        return;
+      }
 
       // Fetch profile
       const { data: profileData } = await supabase

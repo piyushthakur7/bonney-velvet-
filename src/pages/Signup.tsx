@@ -14,6 +14,12 @@ const Signup = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!supabase) {
+      setError('Supabase is not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -38,9 +44,13 @@ const Signup = () => {
       
       if (profileError) {
         console.error('Error creating profile:', profileError);
+        // Note: The user is still created in Auth, but profile creation failed.
+        // We show this error to the user so they know something went wrong.
+        setError('Account created, but profile setup failed. Please contact support.');
+        setLoading(false);
+      } else {
+        navigate('/');
       }
-      
-      navigate('/');
     }
   };
 
