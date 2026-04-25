@@ -144,6 +144,7 @@ export const createWooCommerceOrder = async (
         last_name: customerDetails.name.split(' ').slice(1).join(' ') || '',
         address_1: customerDetails.address,
         city: customerDetails.city,
+        state: customerDetails.state || '',
         postcode: customerDetails.pincode,
         country: 'IN',
         email: customerDetails.email,
@@ -154,6 +155,7 @@ export const createWooCommerceOrder = async (
         last_name: customerDetails.name.split(' ').slice(1).join(' ') || '',
         address_1: customerDetails.address,
         city: customerDetails.city,
+        state: customerDetails.state || '',
         postcode: customerDetails.pincode,
         country: 'IN',
       },
@@ -174,14 +176,17 @@ export const createWooCommerceOrder = async (
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({}));
+      console.error('WooCommerce Order Error Response:', errorData);
       throw new Error(`WooCommerce API Error: ${errorData.message || response.status}`);
     }
 
-    return await response.json();
+    const result = await response.json();
+    console.log('✅ WooCommerce Order Created:', { id: result.id, number: result.number, status: result.status });
+    return result;
   } catch (error) {
     console.error('Error creating order in WooCommerce:', error);
-    return null;
+    throw error; // Re-throw so the checkout flow knows it failed
   }
 };
 

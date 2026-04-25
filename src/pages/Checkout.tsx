@@ -73,9 +73,7 @@ const Checkout = () => {
       }
 
       // 2. Create Order on Backend
-      // TEMPORARY: Using ₹1 for testing. Remove this line and use `total` for production.
-      const testAmount = 1;
-      const orderData = await createRazorpayOrder(testAmount, `receipt_${Date.now()}`);
+      const orderData = await createRazorpayOrder(total, `receipt_${Date.now()}`);
       if (!orderData || !orderData.id) {
         throw new Error('Failed to create secure order');
       }
@@ -119,8 +117,6 @@ const Checkout = () => {
       });
 
       if (verification.status === 'success') {
-        setCreatedOrderId(response.razorpay_order_id);
-        
         let finalUserId = user?.id;
 
         // 5. Create Account FIRST if requested (so we have a user_id for the order)
@@ -163,7 +159,6 @@ const Checkout = () => {
 
         if (dbError) {
           console.error('Supabase Order Error:', dbError.message);
-          // If RLS fails, we inform the console but proceed with business-critical syncs
           if (dbError.message.includes('row-level security')) {
             console.warn('RLS Violation: Please ensure the "orders" table allows public inserts for guests or requires authentication.');
           }
@@ -171,18 +166,28 @@ const Checkout = () => {
 
         // 7. Business-Critical Syncs (WooCommerce & Shiprocket)
         // These are decoupled from Supabase state to ensure orders aren't lost to the client.
+        let wcOrderNumber = response.razorpay_order_id; // fallback display ID
+        
         try {
-          await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
+          const wcOrder = await createWooCommerceOrder(cart, formData, total, response.razorpay_payment_id);
+          if (wcOrder && wcOrder.number) {
+            wcOrderNumber = wcOrder.number;
+            console.log('✅ WooCommerce order synced: #' + wcOrderNumber);
+          }
         } catch (wcError) {
           console.error('WooCommerce Sync Error:', wcError);
+          // Payment succeeded — order will show in Razorpay dashboard even if WC sync fails
         }
 
         try {
           await syncOrderToShiprocket(cart, formData, total);
+          console.log('✅ Shiprocket order synced');
         } catch (srError) {
           console.error('Shiprocket Sync Error:', srError);
+          // Payment succeeded — fulfillment can be triggered manually from Shiprocket dashboard
         }
 
+        setCreatedOrderId(wcOrderNumber.toString());
         setSuccess(true);
         clearCart();
       } else {

@@ -94,16 +94,16 @@ export const syncOrderToShiprocket = async (
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({}));
       console.error('Shiprocket Order Creation Failed:', errorData);
       throw new Error(`Shiprocket API Error: ${errorData.message || response.status}`);
     }
     
     const result = await response.json();
-    console.log('Shiprocket Sync Success:', result);
+    console.log('✅ Shiprocket Sync Success:', { order_id: result.order_id, shipment_id: result.shipment_id });
     return result;
   } catch (error) {
     console.error('Shiprocket Sync Error:', error);
-    return null;
+    throw error; // Re-throw so the checkout flow knows it failed
   }
 };
