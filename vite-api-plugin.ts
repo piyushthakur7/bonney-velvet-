@@ -45,7 +45,9 @@ export function viteApiPlugin(env: Record<string, string>): Plugin {
             console.error('Local API Error (create-order):', error);
             
             res.statusCode = 500;
-            return res.end(JSON.stringify({ error: error.message || 'Failed to create Razorpay order' }));
+            res.setHeader('Content-Type', 'application/json');
+            const errorMessage = error.error?.description || error.message || 'Failed to create Razorpay order';
+            return res.end(JSON.stringify({ error: errorMessage }));
           }
         }
 
@@ -73,7 +75,8 @@ export function viteApiPlugin(env: Record<string, string>): Plugin {
           } catch (error: any) {
             console.error('Local API Error (verify-payment):', error);
             res.statusCode = 500;
-            return res.end(JSON.stringify({ error: error.message }));
+            res.setHeader('Content-Type', 'application/json');
+            return res.end(JSON.stringify({ error: error.message || 'Payment verification failed' }));
           }
         }
 

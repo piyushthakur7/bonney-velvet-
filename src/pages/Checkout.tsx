@@ -73,7 +73,9 @@ const Checkout = () => {
       }
 
       // 2. Create Order on Backend
-      const orderData = await createRazorpayOrder(total, `receipt_${Date.now()}`);
+      // TEMPORARY: Using ₹1 for testing. Remove this line and use `total` for production.
+      const testAmount = 1;
+      const orderData = await createRazorpayOrder(testAmount, `receipt_${Date.now()}`);
       if (!orderData || !orderData.id) {
         throw new Error('Failed to create secure order');
       }
