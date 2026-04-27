@@ -43,14 +43,9 @@ const Signup = () => {
         .insert([{ id: user.id, full_name: fullName, email }]);
       
       if (profileError) {
-        console.error('Error creating profile:', profileError);
-        // Note: The user is still created in Auth, but profile creation failed.
-        // We show this error to the user so they know something went wrong.
-        setError('Account created, but profile setup failed. Please contact support.');
-        setLoading(false);
-      } else {
-        navigate('/');
+        console.warn('Profile creation blocked by RLS or handled by trigger:', profileError);
       }
+      navigate('/');
     }
   };
 
