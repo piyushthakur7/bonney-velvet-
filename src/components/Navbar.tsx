@@ -103,15 +103,8 @@ const Navbar = () => {
                 </div>
               </Link>
             ) : (
-              <Link to="/login" className="p-2 text-zinc-900 hover:text-brand transition-colors relative flex items-center">
-                <Search size={20} className="opacity-0" /> {/* Spacer */}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-[22px] h-[22px] absolute inset-0 m-auto">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                </svg>
-                <div className="absolute -top-0.5 -right-1 text-[#ff9900]">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                </div>
+              <Link to="/login" className="p-2 text-zinc-900 hover:text-brand transition-colors">
+                <UserIcon size={22} strokeWidth={2.5} />
               </Link>
             )}
 
